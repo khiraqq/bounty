@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
+﻿import { useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { initApp, exposeToWindow } from '../utils/auth';
 import { initSettings, exposeSettingsToWindow } from '../utils/settings';
 
-// ── inline SVG icon components (no data-lucide attrs) ──────────────────────
+// â”€â”€ inline SVG icon components (no data-lucide attrs) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function IcoUser() {
   return (
@@ -83,7 +83,7 @@ function RuleX() {
   );
 }
 
-// ── static data ─────────────────────────────────────────────────────────────
+// â”€â”€ static data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const NOTIF_ROWS = [
   ['Order updates', 'Get notified about order status changes'],
@@ -105,7 +105,7 @@ const PW_RULES = [
 ];
 
 const PAGE_STYLES = `
-  :root{--brand:#6c47ff;--brand-hover:#5835e0}
+  :root{--brand:#111111;--brand-hover:#2f2f2f}
   .toggle-track{position:relative;display:inline-flex;align-items:center;width:44px;height:24px;border-radius:9999px;background:hsl(var(--muted));border:1px solid hsl(var(--border));cursor:pointer;transition:background .25s;flex-shrink:0}
   .toggle-track.active{background:#16a34a;border-color:#16a34a}
   .toggle-thumb{position:absolute;left:3px;width:18px;height:18px;border-radius:9999px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .25s cubic-bezier(.4,0,.2,1)}
@@ -234,7 +234,7 @@ export default function AccountSettings() {
                     <IcoUpload /> Upload photo
                   </button>
                   <p id="avatar-error" className="hidden text-xs text-red-500 mt-1.5" />
-                  <p className="text-xs text-muted-foreground mt-1.5">JPEG, PNG, HEIC or GIF · Max 10 MB</p>
+                  <p className="text-xs text-muted-foreground mt-1.5">JPEG, PNG, HEIC or GIF Â· Max 10 MB</p>
                 </div>
               </div>
               <div>
@@ -387,3 +387,4 @@ export default function AccountSettings() {
     </>
   );
 }
+

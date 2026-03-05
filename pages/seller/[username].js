@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -32,7 +32,7 @@ export default function SellerProfile() {
   const stars = seller ? Math.round(seller.rating || 5) : 5;
 
   if (loading) return (
-    <Shell title="Loading…">
+    <Shell title="Loadingâ€¦">
       <div className="flex items-center justify-center py-32"><div className="auth-spinner" style={{ borderTopColor: 'var(--brand)' }} /></div>
     </Shell>
   );
@@ -43,7 +43,7 @@ export default function SellerProfile() {
   );
 
   return (
-    <Shell title={seller.displayName + ' — Bounty Seller'}>
+    <Shell title={seller.displayName + ' â€” Bounty Seller'}>
       <div className="mx-auto max-w-6xl px-4 py-8">
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
           <Link href="/" className="hover:text-foreground">Home</Link><span>/</span>
@@ -61,19 +61,19 @@ export default function SellerProfile() {
               <div className="flex items-center gap-3 mb-1 flex-wrap">
                 <h1 className="text-2xl font-black">{seller.displayName}</h1>
                 {seller.isVerified && <span className="verified-badge text-sm px-2 py-0.5 rounded-full border border-blue-500/30 bg-blue-500/10"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg> Verified Seller</span>}
-                <span className="text-sm px-2 py-0.5 rounded-full bg-green-500/10 text-green-500 font-semibold">● Online</span>
+                <span className="text-sm px-2 py-0.5 rounded-full bg-green-500/10 text-green-500 font-semibold">â— Online</span>
               </div>
               <p className="text-sm text-muted-foreground mb-3">@{seller.username}</p>
               <div className="flex items-center gap-6 flex-wrap text-sm">
                 <div className="text-center"><div className="font-black text-xl" style={{ color: 'var(--brand)' }}>{seller.rating?.toFixed(1) || '5.0'}</div><div className="text-xs text-muted-foreground">Rating</div></div>
                 <div className="text-center"><div className="font-black text-xl">{seller.reviewCount || 0}</div><div className="text-xs text-muted-foreground">Reviews</div></div>
                 <div className="text-center"><div className="font-black text-xl">{seller.totalSales || 0}</div><div className="text-xs text-muted-foreground">Sales</div></div>
-                <div className="text-center"><div className="font-black text-xl">⚡</div><div className="text-xs text-muted-foreground">{seller.responseTime || 'Fast'}</div></div>
+                <div className="text-center"><div className="font-black text-xl">âš¡</div><div className="text-xs text-muted-foreground">{seller.responseTime || 'Fast'}</div></div>
               </div>
               {seller.description && <p className="text-sm text-muted-foreground mt-3 max-w-xl">{seller.description}</p>}
               {seller.games?.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-3">
-                  {seller.games.map(g => <span key={g} className="text-xs px-2 py-0.5 rounded-full font-medium" style={{ background: 'rgba(108,71,255,0.1)', color: '#a78bfa' }}>{g}</span>)}
+                  {seller.games.map(g => <span key={g} className="text-xs px-2 py-0.5 rounded-full font-medium" style={{ background: 'rgba(107,114,128,0.1)', color: '#d1d5db' }}>{g}</span>)}
                 </div>
               )}
             </div>
@@ -96,12 +96,12 @@ export default function SellerProfile() {
                   {listings.map(l => (
                     <Link href={'/listing/' + l._id} key={l._id} className="listing-card block">
                       <div className="flex items-center gap-2 mb-2">
-                        {l.game && <span className="text-xs px-2 py-0.5 rounded-full font-medium" style={{ background: 'rgba(108,71,255,0.1)', color: '#a78bfa' }}>{l.game}</span>}
+                        {l.game && <span className="text-xs px-2 py-0.5 rounded-full font-medium" style={{ background: 'rgba(107,114,128,0.1)', color: '#d1d5db' }}>{l.game}</span>}
                         {l.category && <span className="text-xs px-2 py-0.5 rounded-full border border-border font-medium">{l.category}</span>}
                       </div>
                       <p className="text-sm font-bold mb-2 line-clamp-2">{l.title}</p>
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-muted-foreground">⚡ {l.deliveryTime || '1-24h'}</span>
+                        <span className="text-xs text-muted-foreground">âš¡ {l.deliveryTime || '1-24h'}</span>
                         <span className="font-black" style={{ color: 'var(--brand)' }}>${l.price?.toFixed(2)}</span>
                       </div>
                     </Link>
@@ -122,7 +122,7 @@ export default function SellerProfile() {
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
                           <span className="font-semibold text-sm">{r.reviewerUsername}</span>
-                          <span style={{ color: '#f59e0b' }}>{'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}</span>
+                          <span style={{ color: '#f59e0b' }}>{'â˜…'.repeat(r.rating)}{'â˜†'.repeat(5 - r.rating)}</span>
                         </div>
                         <span className="text-xs text-muted-foreground">{new Date(r.createdAt).toLocaleDateString()}</span>
                       </div>
@@ -140,11 +140,11 @@ export default function SellerProfile() {
               <h3 className="font-bold mb-4">Seller Stats</h3>
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between"><span className="text-muted-foreground">Total Sales</span><span className="font-semibold">{seller.totalSales || 0}</span></div>
-                <div className="flex justify-between"><span className="text-muted-foreground">Rating</span><span className="font-semibold" style={{ color: '#f59e0b' }}>{'★'.repeat(stars)} {seller.rating?.toFixed(1)}</span></div>
+                <div className="flex justify-between"><span className="text-muted-foreground">Rating</span><span className="font-semibold" style={{ color: '#f59e0b' }}>{'â˜…'.repeat(stars)} {seller.rating?.toFixed(1)}</span></div>
                 <div className="flex justify-between"><span className="text-muted-foreground">Reviews</span><span className="font-semibold">{seller.reviewCount || 0}</span></div>
                 <div className="flex justify-between"><span className="text-muted-foreground">Response Time</span><span className="font-semibold">{seller.responseTime || 'Within 1 hour'}</span></div>
                 <div className="flex justify-between"><span className="text-muted-foreground">Member Since</span><span className="font-semibold">{new Date(seller.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span></div>
-                {seller.isVerified && <div className="flex justify-between"><span className="text-muted-foreground">Status</span><span className="font-semibold text-blue-400">✓ Verified</span></div>}
+                {seller.isVerified && <div className="flex justify-between"><span className="text-muted-foreground">Status</span><span className="font-semibold text-blue-400">âœ“ Verified</span></div>}
               </div>
               <button onClick={() => { const tok = localStorage.getItem('bounty_token'); if (!tok) { window.openModal?.('login'); return; } window.location.href = '/messages?to=' + seller.username; }} className="btn-primary w-full mt-4">Contact Seller</button>
             </div>
@@ -167,3 +167,4 @@ function Shell({ title, children }) {
     </>
   );
 }
+

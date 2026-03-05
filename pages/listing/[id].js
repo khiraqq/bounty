@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -39,9 +39,9 @@ export default function ListingPage() {
         body: JSON.stringify({ listingId: listing._id, sellerUsername: listing.sellerUsername, game: listing.game, category: listing.category, title: listing.title, quantity, price: listing.price }),
       });
       const data = await res.json();
-      if (res.ok) { setOrderMsg('✅ Order placed! Check your orders page.'); }
-      else setOrderMsg('❌ ' + (data.message || 'Failed to place order'));
-    } catch { setOrderMsg('❌ Network error'); }
+      if (res.ok) { setOrderMsg('âœ… Order placed! Check your orders page.'); }
+      else setOrderMsg('âŒ ' + (data.message || 'Failed to place order'));
+    } catch { setOrderMsg('âŒ Network error'); }
     setOrderLoading(false);
   };
 
@@ -50,7 +50,7 @@ export default function ListingPage() {
 
   if (loading) return (
     <>
-      <PageShell title="Loading…">
+      <PageShell title="Loadingâ€¦">
         <div className="flex items-center justify-center py-32 text-muted-foreground">
           <div className="auth-spinner" style={{ borderTopColor: 'var(--brand)' }} />
         </div>
@@ -68,7 +68,7 @@ export default function ListingPage() {
   );
 
   return (
-    <PageShell title={listing.title + ' — Bounty'}>
+    <PageShell title={listing.title + ' â€” Bounty'}>
       <div className="mx-auto max-w-7xl px-4 py-8">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6 flex-wrap">
@@ -86,15 +86,15 @@ export default function ListingPage() {
               <div className="flex items-start gap-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-2 flex-wrap">
-                    {listing.game && <span className="text-xs px-2 py-0.5 rounded-full font-semibold" style={{ background: 'rgba(108,71,255,0.12)', color: '#a78bfa' }}>{listing.game}</span>}
+                    {listing.game && <span className="text-xs px-2 py-0.5 rounded-full font-semibold" style={{ background: 'rgba(107,114,128,0.12)', color: '#d1d5db' }}>{listing.game}</span>}
                     {listing.category && <span className="text-xs px-2 py-0.5 rounded-full font-semibold border border-border">{listing.category}</span>}
-                    {listing.isFeatured && <span className="text-xs px-2 py-0.5 rounded-full font-bold" style={{ background: '#f59e0b', color: 'white' }}>⭐ Featured</span>}
+                    {listing.isFeatured && <span className="text-xs px-2 py-0.5 rounded-full font-bold" style={{ background: '#f59e0b', color: 'white' }}>â­ Featured</span>}
                   </div>
                   <h1 className="text-2xl font-black mb-3">{listing.title}</h1>
                   <div className="flex items-center gap-4 text-sm text-muted-foreground flex-wrap">
-                    <span>⚡ Delivery: <strong className="text-foreground">{listing.deliveryTime || '1-24 hours'}</strong></span>
-                    <span>✓ Completion: <strong className="text-foreground">{listing.completionRate || 100}%</strong></span>
-                    {listing.stock && <span>📦 Stock: <strong className="text-foreground">{listing.stock.toLocaleString()}</strong></span>}
+                    <span>âš¡ Delivery: <strong className="text-foreground">{listing.deliveryTime || '1-24 hours'}</strong></span>
+                    <span>âœ“ Completion: <strong className="text-foreground">{listing.completionRate || 100}%</strong></span>
+                    {listing.stock && <span>ðŸ“¦ Stock: <strong className="text-foreground">{listing.stock.toLocaleString()}</strong></span>}
                   </div>
                 </div>
               </div>
@@ -117,10 +117,10 @@ export default function ListingPage() {
                   <div className="flex items-center gap-2 mb-1 flex-wrap">
                     <span className="font-bold text-lg">{listing.sellerUsername}</span>
                     {listing.isSellerVerified && <span className="verified-badge text-xs"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg> Verified</span>}
-                    <span className={listing.isSellerOnline ? 'online-badge' : 'offline-badge'}>{listing.isSellerOnline ? '● Online' : '○ Offline'}</span>
+                    <span className={listing.isSellerOnline ? 'online-badge' : 'offline-badge'}>{listing.isSellerOnline ? 'â— Online' : 'â—‹ Offline'}</span>
                   </div>
                   <div className="flex items-center gap-4 text-sm flex-wrap">
-                    <span style={{ color: '#f59e0b' }}>{'★'.repeat(stars)}{'☆'.repeat(5 - stars)}</span>
+                    <span style={{ color: '#f59e0b' }}>{'â˜…'.repeat(stars)}{'â˜†'.repeat(5 - stars)}</span>
                     <span className="text-muted-foreground">{listing.sellerRating?.toFixed(1) || '5.0'} ({listing.sellerReviews || 0} reviews)</span>
                     <span className="text-muted-foreground">{listing.sellerOrders || 0} orders completed</span>
                   </div>
@@ -144,7 +144,7 @@ export default function ListingPage() {
                       <div className="flex items-center justify-between mb-1">
                         <div className="flex items-center gap-2">
                           <span className="font-semibold text-sm">{r.reviewerUsername}</span>
-                          <span style={{ color: '#f59e0b', fontSize: '0.8rem' }}>{'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}</span>
+                          <span style={{ color: '#f59e0b', fontSize: '0.8rem' }}>{'â˜…'.repeat(r.rating)}{'â˜†'.repeat(5 - r.rating)}</span>
                         </div>
                         <span className="text-xs text-muted-foreground">{new Date(r.createdAt).toLocaleDateString()}</span>
                       </div>
@@ -186,13 +186,13 @@ export default function ListingPage() {
               </div>
 
               {orderMsg && (
-                <div className={'text-sm px-3 py-2 rounded-md mb-3 ' + (orderMsg.startsWith('✅') ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400')}>
+                <div className={'text-sm px-3 py-2 rounded-md mb-3 ' + (orderMsg.startsWith('âœ…') ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400')}>
                   {orderMsg}
                 </div>
               )}
 
               <button onClick={handleBuy} disabled={orderLoading} className="btn-primary w-full mb-2" style={{ height: '2.75rem' }}>
-                {orderLoading ? 'Placing Order…' : 'Buy Now — $' + total}
+                {orderLoading ? 'Placing Orderâ€¦' : 'Buy Now â€” $' + total}
               </button>
               <button onClick={() => { const tok = localStorage.getItem('bounty_token'); if (!tok) { window.openModal?.('login'); return; } window.location.href = '/messages?to=' + listing.sellerUsername; }} className="btn-outline w-full" style={{ height: '2.5rem' }}>
                 Contact Seller
@@ -237,7 +237,7 @@ function PageShell({ title, children }) {
             <Link href="/browse?category=Currency" className="text-sm font-medium text-nav-foreground/80 hover:text-nav-foreground transition-colors">Currency</Link>
             <Link href="/browse?category=Items" className="text-sm font-medium text-nav-foreground/80 hover:text-nav-foreground transition-colors">Items</Link>
             <Link href="/browse?category=Boosting" className="text-sm font-medium text-nav-foreground/80 hover:text-nav-foreground transition-colors">Boosting</Link>
-            <Link href="/become-a-seller" className="text-sm font-semibold px-3 py-1.5 rounded-md" style={{ background: 'rgba(108,71,255,0.1)', color: '#a78bfa', border: '1px solid rgba(108,71,255,0.2)' }}>Sell on Bounty</Link>
+            <Link href="/become-a-seller" className="text-sm font-semibold px-3 py-1.5 rounded-md" style={{ background: 'rgba(107,114,128,0.1)', color: '#d1d5db', border: '1px solid rgba(107,114,128,0.2)' }}>Sell on Bounty</Link>
           </div>
           <div className="ml-8 hidden md:flex items-center gap-3">
             <button id="login-button" onClick={() => window.openModal?.('login')} className="rounded-md border border-nav-foreground/20 bg-transparent px-4 py-1.5 text-sm font-medium text-nav-foreground/60 hover:text-nav-foreground hover:border-nav-foreground/40 transition">Log in</button>
@@ -293,3 +293,4 @@ function PageShell({ title, children }) {
     </>
   );
 }
+

@@ -1,9 +1,9 @@
-import { useEffect, useState, useRef } from 'react';
+﻿import { useEffect, useState, useRef } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { initApp, exposeToWindow } from '../utils/auth';
 
-// ── SVG icons ─────────────────────────────────────────────────────────────────
+// â”€â”€ SVG icons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function IcoSearch() {
   return (
@@ -89,7 +89,7 @@ function IcoMoon() {
   );
 }
 
-// ── helpers ───────────────────────────────────────────────────────────────────
+// â”€â”€ helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function formatTime(dateStr) {
   if (!dateStr) return '';
@@ -115,7 +115,7 @@ function getUsername() {
 }
 
 const PAGE_STYLES = `
-  :root{--brand:#6c47ff;--brand-hover:#5835e0}
+  :root{--brand:#111111;--brand-hover:#2f2f2f}
   .msg-sidebar{width:320px;flex-shrink:0;border-right:1px solid hsl(var(--border));display:flex;flex-direction:column;height:100%}
   @media(max-width:768px){.msg-sidebar{width:100%;border-right:none}.msg-chat-area{display:none}.msg-sidebar.mobile-hidden{display:none}.msg-chat-area.mobile-visible{display:flex}}
   .msg-chat-area{flex:1;display:flex;flex-direction:column;height:100%}
@@ -123,15 +123,15 @@ const PAGE_STYLES = `
   .conv-item:hover{background:hsl(var(--accent))}
   .conv-item.active{background:hsl(var(--accent))}
   .conv-avatar{width:42px;height:42px;border-radius:9999px;background:hsl(var(--muted));display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid hsl(var(--border))}
-  .unread-dot{width:9px;height:9px;border-radius:9999px;background:#6c47ff;flex-shrink:0}
+  .unread-dot{width:9px;height:9px;border-radius:9999px;background:#111111;flex-shrink:0}
   .msg-bubble{max-width:72%;padding:.625rem .875rem;border-radius:1rem;font-size:.875rem;line-height:1.45;word-break:break-word}
-  .msg-bubble.mine{background:#6c47ff;color:#fff;border-bottom-right-radius:.25rem;margin-left:auto}
+  .msg-bubble.mine{background:#111111;color:#fff;border-bottom-right-radius:.25rem;margin-left:auto}
   .msg-bubble.theirs{background:hsl(var(--muted));color:hsl(var(--foreground));border-bottom-left-radius:.25rem}
   .msg-input-wrap{border-top:1px solid hsl(var(--border));padding:.875rem 1rem;display:flex;gap:.5rem;align-items:flex-end;background:hsl(var(--background))}
   .msg-input{flex:1;resize:none;padding:.625rem .875rem;border-radius:.75rem;background:hsl(var(--muted)/0.5);border:1px solid hsl(var(--border));color:hsl(var(--foreground));font-size:.875rem;line-height:1.45;max-height:120px;outline:none;font-family:inherit}
   .msg-input:focus{border-color:hsl(var(--ring))}
-  .send-btn{width:38px;height:38px;border-radius:9999px;background:#6c47ff;color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s}
-  .send-btn:hover{background:#5835e0}
+  .send-btn{width:38px;height:38px;border-radius:9999px;background:#111111;color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s}
+  .send-btn:hover{background:#2f2f2f}
   .send-btn:disabled{opacity:.5;cursor:not-allowed}
   .notif-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem .875rem;border-radius:.375rem;font-size:.8125rem;font-weight:600;border:1px solid hsl(var(--border));background:transparent;color:hsl(var(--foreground));cursor:pointer;transition:background .15s}
   .notif-btn:hover{background:hsl(var(--accent))}
@@ -289,7 +289,7 @@ export default function MessagesPage() {
           <span className="text-muted-foreground">/</span>
           <span className="text-sm font-medium">Messages</span>
           <div className="ml-auto flex items-center gap-2">
-            <button className={notifBtnClass()} onClick={requestNotifications} disabled={notifStatus === 'denied' || notifStatus === 'unsupported'} title={notifStatus === 'denied' ? 'Notifications blocked — please allow in browser settings' : ''}>
+            <button className={notifBtnClass()} onClick={requestNotifications} disabled={notifStatus === 'denied' || notifStatus === 'unsupported'} title={notifStatus === 'denied' ? 'Notifications blocked â€” please allow in browser settings' : ''}>
               {notifStatus === 'granted' ? <IcoBell /> : <IcoBellOff />}
               {notifLabel()}
             </button>
@@ -320,7 +320,7 @@ export default function MessagesPage() {
                 </svg>
                 <p className="text-sm font-medium text-foreground">No conversations yet</p>
                 <p className="text-xs text-muted-foreground mt-1">Browse listings and message a seller to get started</p>
-                <Link href="/" className="mt-3 inline-block text-xs font-semibold px-4 py-2 rounded-lg text-white" style={{ background: '#6c47ff' }}>Browse Listings</Link>
+                <Link href="/" className="mt-3 inline-block text-xs font-semibold px-4 py-2 rounded-lg text-white" style={{ background: '#111111' }}>Browse Listings</Link>
               </div>
             )}
             {conversations.map(function (conv) {
@@ -430,3 +430,4 @@ export default function MessagesPage() {
     </>
   );
 }
+

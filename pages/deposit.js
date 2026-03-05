@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
+﻿import { useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { initApp, exposeToWindow } from '../utils/auth';
 
-// ── SVG icons ─────────────────────────────────────────────────────────────
+// â”€â”€ SVG icons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function IcoSun() {
   return (
@@ -64,7 +64,7 @@ function CheckBadge() {
   );
 }
 
-// ── crypto config ──────────────────────────────────────────────────────────
+// â”€â”€ crypto config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const CRYPTOS = {
   btc: { name: 'Bitcoin', symbol: 'BTC', network: 'Bitcoin Network', address: '1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf2R', priceUSD: 67000 },
@@ -72,7 +72,7 @@ const CRYPTOS = {
 };
 const PRESETS = [10, 25, 50, 100, 250, 500];
 
-// ── all deposit logic (runs client-side only inside useEffect) ─────────────
+// â”€â”€ all deposit logic (runs client-side only inside useEffect) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function initDeposit() {
   var selectedCrypto = null;
@@ -264,7 +264,7 @@ function renderHistory(list) {
 }
 
 const PAGE_STYLES = `
-  :root{--brand:#6c47ff;--brand-hover:#5835e0}
+  :root{--brand:#111111;--brand-hover:#2f2f2f}
   .crypto-card{position:relative;display:flex;flex-direction:column;align-items:center;gap:.75rem;padding:1.5rem 1rem;border-radius:.875rem;border:1.5px solid hsl(var(--border));background:hsl(var(--card));cursor:pointer;transition:border-color .2s,box-shadow .25s,transform .15s;user-select:none}
   .crypto-card:hover{border-color:hsl(var(--ring)/.5);transform:translateY(-2px)}
   .crypto-card.selected{border-color:hsl(var(--foreground));box-shadow:0 0 18px rgba(255,255,255,.15)}
@@ -342,7 +342,7 @@ export default function DepositPage() {
               <BtcIcon />
               <div className="text-center">
                 <p className="text-sm font-bold">Bitcoin</p>
-                <p className="text-xs text-muted-foreground">BTC · ~10 min</p>
+                <p className="text-xs text-muted-foreground">BTC Â· ~10 min</p>
               </div>
             </div>
             <div id="card-ltc" className="crypto-card" onClick={function () { window.selectCrypto && window.selectCrypto('ltc'); }}>
@@ -350,7 +350,7 @@ export default function DepositPage() {
               <LtcIcon />
               <div className="text-center">
                 <p className="text-sm font-bold">Litecoin</p>
-                <p className="text-xs text-muted-foreground">LTC · ~5 min</p>
+                <p className="text-xs text-muted-foreground">LTC Â· ~5 min</p>
               </div>
             </div>
           </div>
@@ -400,7 +400,7 @@ export default function DepositPage() {
             </div>
 
             <div className="rounded-lg bg-muted/50 border border-border p-3">
-              <p id="wallet-address" className="font-mono text-xs break-all text-foreground">—</p>
+              <p id="wallet-address" className="font-mono text-xs break-all text-foreground">â€”</p>
             </div>
 
             <button id="copy-btn" className="gen-btn" onClick={function () { window.copyAddress && window.copyAddress(); }}>
@@ -412,14 +412,14 @@ export default function DepositPage() {
                 return (
                   <div key={row[0]} className="flex justify-between">
                     <span>{row[0]}</span>
-                    <span id={row[1]} className="font-semibold text-foreground">—</span>
+                    <span id={row[1]} className="font-semibold text-foreground">â€”</span>
                   </div>
                 );
               })}
             </div>
 
             <p className="text-xs text-muted-foreground bg-muted/50 border border-border rounded-lg p-3">
-              ⚠️ Only send <span id="warn-coin" className="font-semibold" /> to this address. Sending any other asset will result in permanent loss of funds.
+              âš ï¸ Only send <span id="warn-coin" className="font-semibold" /> to this address. Sending any other asset will result in permanent loss of funds.
             </p>
 
             <button className="cancel-btn" onClick={function () { window.cancelDeposit && window.cancelDeposit(); }}>Cancel</button>
@@ -437,3 +437,4 @@ export default function DepositPage() {
     </>
   );
 }
+

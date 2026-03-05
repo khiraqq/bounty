@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { initApp, exposeToWindow } from '../utils/auth';
 
-// ── SVG icons ─────────────────────────────────────────────────────────────────
+// â”€â”€ SVG icons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function IcoSun() {
   return (
@@ -71,7 +71,7 @@ function IcoArrowRight() {
   );
 }
 
-// ── constants ─────────────────────────────────────────────────────────────────
+// â”€â”€ constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const GAMES = [
   'World of Warcraft', 'Final Fantasy XIV', 'Runescape', 'Path of Exile',
@@ -96,13 +96,13 @@ const BENEFITS = [
 ];
 
 const STEPS = [
-  { n: '1', title: 'Create your listing', desc: 'Tell buyers what you sell — game, category, price, and delivery time.' },
+  { n: '1', title: 'Create your listing', desc: 'Tell buyers what you sell â€” game, category, price, and delivery time.' },
   { n: '2', title: 'Receive orders', desc: 'Buyers find you through search and listings. Accept orders you can fulfill.' },
   { n: '3', title: 'Deliver & get paid', desc: 'Complete the order, confirm delivery, and funds are released to your wallet instantly.' },
 ];
 
 const PAGE_STYLES = `
-  :root{--brand:#6c47ff;--brand-hover:#5835e0}
+  :root{--brand:#111111;--brand-hover:#2f2f2f}
   .seller-input{width:100%;height:2.5rem;padding:0 .75rem;border-radius:.5rem;background:hsl(var(--background));border:1px solid hsl(var(--input));color:hsl(var(--foreground));font-size:.875rem;outline:none;transition:border-color .2s}
   .seller-input:focus{border-color:hsl(var(--ring))}
   .seller-select{width:100%;height:2.5rem;padding:0 2.5rem 0 .75rem;border-radius:.5rem;background:hsl(var(--background));border:1px solid hsl(var(--input));color:hsl(var(--foreground));font-size:.875rem;outline:none;appearance:none;background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");background-position:right .5rem center;background-repeat:no-repeat;background-size:1.5em 1.5em;cursor:pointer}
@@ -110,13 +110,13 @@ const PAGE_STYLES = `
   .seller-textarea{width:100%;padding:.625rem .75rem;border-radius:.5rem;background:hsl(var(--background));border:1px solid hsl(var(--input));color:hsl(var(--foreground));font-size:.875rem;outline:none;resize:vertical;min-height:90px;font-family:inherit}
   .seller-textarea:focus{border-color:hsl(var(--ring))}
   .game-tag{display:inline-flex;align-items:center;gap:.375rem;padding:.25rem .75rem;border-radius:9999px;font-size:.8125rem;font-weight:500;border:1px solid hsl(var(--border));cursor:pointer;transition:all .15s;user-select:none;background:transparent;color:hsl(var(--foreground))}
-  .game-tag.selected{background:#6c47ff;border-color:#6c47ff;color:#fff}
-  .submit-btn{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;height:2.75rem;border-radius:.5rem;font-size:1rem;font-weight:700;color:#fff;background:linear-gradient(135deg,#6c47ff,#5835e0);border:none;cursor:pointer;transition:opacity .15s,transform .1s;box-shadow:0 4px 15px rgba(108,71,255,.4)}
+  .game-tag.selected{background:#111111;border-color:#111111;color:#fff}
+  .submit-btn{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;height:2.75rem;border-radius:.5rem;font-size:1rem;font-weight:700;color:#fff;background:linear-gradient(135deg,#111111,#2f2f2f);border:none;cursor:pointer;transition:opacity .15s,transform .1s;box-shadow:0 4px 15px rgba(107,114,128,.4)}
   .submit-btn:hover{opacity:.92}.submit-btn:active{transform:scale(.98)}.submit-btn:disabled{opacity:.6;cursor:not-allowed}
   .benefit-card{padding:1.5rem;border-radius:.875rem;border:1px solid hsl(var(--border));background:hsl(var(--card));transition:border-color .2s,box-shadow .2s}
-  .benefit-card:hover{border-color:rgba(108,71,255,.4);box-shadow:0 4px 20px rgba(108,71,255,.1)}
-  .step-circle{width:40px;height:40px;border-radius:9999px;background:linear-gradient(135deg,#6c47ff,#5835e0);color:#fff;font-size:1.125rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-  .hero-badge{display:inline-flex;align-items:center;gap:.375rem;padding:.3rem .875rem;border-radius:9999px;font-size:.8125rem;font-weight:600;background:rgba(108,71,255,.12);color:#a78bfa;border:1px solid rgba(108,71,255,.25)}
+  .benefit-card:hover{border-color:rgba(107,114,128,.4);box-shadow:0 4px 20px rgba(107,114,128,.1)}
+  .step-circle{width:40px;height:40px;border-radius:9999px;background:linear-gradient(135deg,#111111,#2f2f2f);color:#fff;font-size:1.125rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .hero-badge{display:inline-flex;align-items:center;gap:.375rem;padding:.3rem .875rem;border-radius:9999px;font-size:.8125rem;font-weight:600;background:rgba(107,114,128,.12);color:#d1d5db;border:1px solid rgba(107,114,128,.25)}
   .error-box{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#ef4444;padding:.75rem 1rem;border-radius:.5rem;font-size:.875rem}
   .success-box{background:rgba(22,163,74,.1);border:1px solid rgba(22,163,74,.3);color:#16a34a;padding:.75rem 1rem;border-radius:.5rem;font-size:.875rem;display:flex;align-items:center;gap:.5rem}
   .stat-card{text-align:center;padding:1.5rem 1rem;border-radius:.875rem;border:1px solid hsl(var(--border));background:hsl(var(--card))}
@@ -244,7 +244,7 @@ export default function BecomeASeller() {
       </nav>
 
       {/* HERO */}
-      <div className="border-b border-border" style={{ background: 'linear-gradient(135deg, rgba(108,71,255,.08) 0%, transparent 60%)' }}>
+      <div className="border-b border-border" style={{ background: 'linear-gradient(135deg, rgba(107,114,128,.08) 0%, transparent 60%)' }}>
         <div className="mx-auto max-w-7xl px-4 py-16">
           <div className="text-center mb-12">
             <div className="hero-badge mb-4">
@@ -263,7 +263,7 @@ export default function BecomeASeller() {
             {[['$2M+', 'Paid out monthly'], ['50K+', 'Active sellers'], ['200+', 'Games supported'], ['24/7', 'Live support']].map(function (s) {
               return (
                 <div key={s[0]} className="stat-card">
-                  <p className="text-2xl font-extrabold" style={{ color: '#6c47ff' }}>{s[0]}</p>
+                  <p className="text-2xl font-extrabold" style={{ color: '#111111' }}>{s[0]}</p>
                   <p className="text-sm text-muted-foreground mt-0.5">{s[1]}</p>
                 </div>
               );
@@ -276,7 +276,7 @@ export default function BecomeASeller() {
               var IconComp = b.icon;
               return (
                 <div key={b.title} className="benefit-card">
-                  <div className="mb-3" style={{ color: '#6c47ff' }}><IconComp /></div>
+                  <div className="mb-3" style={{ color: '#111111' }}><IconComp /></div>
                   <h3 className="font-bold mb-1.5 text-sm">{b.title}</h3>
                   <p className="text-xs text-muted-foreground leading-relaxed">{b.desc}</p>
                 </div>
@@ -326,7 +326,7 @@ export default function BecomeASeller() {
           {/* About */}
           <div>
             <label className="text-sm font-semibold block mb-1.5">About your shop</label>
-            <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Tell buyers about yourself — your experience, the games you play, how fast you deliver..." className="seller-textarea" />
+            <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Tell buyers about yourself â€” your experience, the games you play, how fast you deliver..." className="seller-textarea" />
           </div>
 
           {/* Games */}
@@ -415,3 +415,4 @@ export default function BecomeASeller() {
     </>
   );
 }
+

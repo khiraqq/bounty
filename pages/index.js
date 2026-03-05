@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+﻿import { useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { exposeToWindow, initApp } from '../utils/auth';
@@ -26,11 +26,11 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Bounty — Gaming Marketplace</title>
+        <title>Bounty â€” Gaming Marketplace</title>
         <meta name="description" content="Premier gaming marketplace for currency, accounts, and items" />
       </Head>
 
-      {/* ── TOP BAR ─────────────────────────────────────────────────────────── */}
+      {/* â”€â”€ TOP BAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <div className="bg-topbar text-topbar-foreground text-xs">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-1.5">
           <div />
@@ -53,11 +53,11 @@ export default function Home() {
                 </div>
                 <label className="mb-1 block text-xs font-medium text-zinc-300">Language</label>
                 <select id="language-select" className="w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-200 outline-none mb-3">
-                  <option value="en">English (EN)</option><option value="es">Español (ES)</option><option value="fr">Français (FR)</option><option value="de">Deutsch (DE)</option><option value="pt">Português (PT)</option><option value="ja">日本語 (JA)</option><option value="ru">Русский (RU)</option>
+                  <option value="en">English (EN)</option><option value="es">EspaÃ±ol (ES)</option><option value="fr">FranÃ§ais (FR)</option><option value="de">Deutsch (DE)</option><option value="pt">PortuguÃªs (PT)</option><option value="ja">æ—¥æœ¬èªž (JA)</option><option value="ru">Ð ÑƒÑÑÐºÐ¸Ð¹ (RU)</option>
                 </select>
                 <label className="mb-1 block text-xs font-medium text-zinc-300">Currency</label>
                 <select id="currency-select" className="w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-200 outline-none mb-4">
-                  <option value="USD">USD - $</option><option value="EUR">EUR - €</option><option value="GBP">GBP - £</option><option value="BRL">BRL - R$</option><option value="JPY">JPY - ¥</option>
+                  <option value="USD">USD - $</option><option value="EUR">EUR - â‚¬</option><option value="GBP">GBP - Â£</option><option value="BRL">BRL - R$</option><option value="JPY">JPY - Â¥</option>
                 </select>
                 <button onClick={() => window.saveLocaleSettings?.()} className="w-full rounded-md py-2 text-sm font-semibold text-white zinc-btn">Save</button>
                 <button onClick={() => window.toggleLocaleDropdown?.()} className="mt-2 w-full text-center text-xs text-zinc-400 hover:text-zinc-200 transition-colors">Cancel</button>
@@ -72,7 +72,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ── MAIN NAV ────────────────────────────────────────────────────────── */}
+      {/* â”€â”€ MAIN NAV â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <nav className="bg-nav">
         <div className="mx-auto flex max-w-7xl items-center px-4 py-2">
           <Link href="/" className="flex shrink-0 items-center text-nav-foreground font-bold text-2xl" style={{ fontFamily: "'Doto',sans-serif" }}>Bounty</Link>
@@ -83,16 +83,16 @@ export default function Home() {
             <Link href="/browse?category=Items" className="text-sm font-medium text-nav-foreground/80 hover:text-nav-foreground transition-colors">Items</Link>
             <Link href="/browse?category=Boosting" className="text-sm font-medium text-nav-foreground/80 hover:text-nav-foreground transition-colors">Boosting</Link>
             <Link href="/browse?category=Gift Cards" className="text-sm font-medium text-nav-foreground/80 hover:text-nav-foreground transition-colors">Gift Cards</Link>
-            <Link href="/become-a-seller" className="text-sm font-semibold px-3 py-1.5 rounded-md" style={{ background: 'rgba(108,71,255,0.1)', color: '#a78bfa', border: '1px solid rgba(108,71,255,0.2)' }}>Sell on Bounty</Link>
+            <Link href="/become-a-seller" className="text-sm font-semibold px-3 py-1.5 rounded-md" style={{ background: 'rgba(107,114,128,0.1)', color: '#d1d5db', border: '1px solid rgba(107,114,128,0.2)' }}>Sell on Bounty</Link>
           </div>
           <div className="ml-8 hidden md:flex items-center gap-3">
             <div className="flex items-center rounded-md bg-nav-foreground/10 px-3 py-1.5 text-sm text-nav-foreground/60 gap-2 w-48">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
               <span>Search Bounty</span>
             </div>
-            {/* Login button — hidden when logged in */}
+            {/* Login button â€” hidden when logged in */}
             <button id="login-button" onClick={() => window.openModal?.('login')} className="rounded-md border border-nav-foreground/20 bg-transparent px-4 py-1.5 text-sm font-medium text-nav-foreground/60 hover:text-nav-foreground hover:border-nav-foreground/40 transition">Log in</button>
-            {/* Profile area — hidden when logged out */}
+            {/* Profile area â€” hidden when logged out */}
             <div id="profile-area" className="hidden items-center gap-2">
               <button className="nav-icon-btn" title="Switch account">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>
@@ -119,7 +119,7 @@ export default function Home() {
                     <div className="min-w-0">
                       <p id="dropdown-username" className="text-sm font-semibold text-foreground truncate" />
                       <p className="text-xs text-muted-foreground">$0.00</p>
-                      <p className="text-xs font-medium" style={{ color: '#f59e0b' }}>⬡ Bronze Rank</p>
+                      <p className="text-xs font-medium" style={{ color: '#f59e0b' }}>â¬¡ Bronze Rank</p>
                     </div>
                   </div>
                   <div className="flex gap-2 px-3 py-2 border-b border-border">
@@ -151,12 +151,12 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* ── BANNER AD ───────────────────────────────────────────────────────── */}
+      {/* â”€â”€ BANNER AD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <div className="mx-auto max-w-7xl px-4 py-2">
         <video src="https://res.cloudinary.com/dncnkyqne/video/upload/v1771817469/AdBanner.gif_o6cd6a.mp4" autoPlay loop muted playsInline className="w-full h-[35px] sm:h-[42px] object-cover rounded-sm" />
       </div>
 
-      {/* ── HERO ────────────────────────────────────────────────────────────── */}
+      {/* â”€â”€ HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section className="hero-glow relative py-20 px-4 text-center overflow-hidden">
         <div className="mx-auto max-w-3xl relative z-10">
           <span className="trust-badge mb-6 inline-flex">
@@ -165,7 +165,7 @@ export default function Home() {
           </span>
           <h1 className="text-5xl md:text-6xl font-black tracking-tight mb-4" style={{ lineHeight: 1.08 }}>
             The #1 Gaming<br />
-            <span style={{ background: 'linear-gradient(135deg,#6c47ff,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Marketplace</span>
+            <span style={{ background: 'linear-gradient(135deg,#111111,#d1d5db)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Marketplace</span>
           </h1>
           <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto">Buy and sell gaming currency, accounts, items and services. Secure escrow, instant delivery, 24/7 support.</p>
           <div className="flex items-center justify-center gap-3 flex-wrap">
@@ -173,7 +173,7 @@ export default function Home() {
             <Link href="/become-a-seller"><button className="btn-outline">Start Selling</button></Link>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-14">
-            {[['$2M+','Paid to Sellers'],['50K+','Active Sellers'],['200+','Games Supported'],['4.9★','Avg Rating']].map(function(s) { return (
+            {[['$2M+','Paid to Sellers'],['50K+','Active Sellers'],['200+','Games Supported'],['4.9â˜…','Avg Rating']].map(function(s) { return (
               <div key={s[0]} className="stat-box">
                 <div className="text-2xl font-black" style={{ color: 'var(--brand)' }}>{s[0]}</div>
                 <div className="text-xs text-muted-foreground mt-1 font-medium">{s[1]}</div>
@@ -183,7 +183,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── FEATURES ────────────────────────────────────────────────────────── */}
+      {/* â”€â”€ FEATURES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section className="py-14 px-4 border-t" style={{ borderColor: 'hsl(var(--border)/0.5)' }}>
         <div className="mx-auto max-w-7xl">
           <div className="text-center mb-10">
@@ -207,7 +207,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── MARKETPLACE LISTINGS ────────────────────────────────────────────── */}
+      {/* â”€â”€ MARKETPLACE LISTINGS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section id="marketplace" className="py-12 px-4">
         <div className="mx-auto max-w-7xl">
           <div className="flex items-center justify-between mb-6">
@@ -236,13 +236,13 @@ export default function Home() {
           <div id="listings-grid" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             <div className="col-span-full text-center py-16 text-muted-foreground">
               <div className="auth-spinner mx-auto mb-3" style={{ borderTopColor: 'var(--brand)' }} />
-              <p>Loading listings…</p>
+              <p>Loading listingsâ€¦</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── AUTH MODAL ──────────────────────────────────────────────────────── */}
+      {/* â”€â”€ AUTH MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <div id="modal-overlay" className="hidden fixed inset-0 z-50 flex items-center justify-center" onClick={function(e) { window.handleOverlayClick?.(e); }}>
         <div id="modal-backdrop" className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
         <div className="relative z-10 w-full max-w-md mx-4 bg-card text-card-foreground rounded-xl p-8 shadow-2xl border border-border" onClick={function(e) { e.stopPropagation(); }}>
@@ -296,7 +296,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ── POPULAR GAMES ─────────────────────────────────────────────────── */}
+      {/* â”€â”€ POPULAR GAMES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section className="py-14 px-4 border-t" style={{ borderColor: 'hsl(var(--border)/0.5)' }}>
         <div className="mx-auto max-w-7xl">
           <div className="text-center mb-8">
@@ -305,18 +305,18 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
             {[
-              { name: 'World of Warcraft', emoji: '⚔️', listings: '12.4K' },
-              { name: 'OSRS', emoji: '🏹', listings: '8.9K' },
-              { name: 'Path of Exile', emoji: '💀', listings: '6.2K' },
-              { name: 'Fortnite', emoji: '🎯', listings: '5.1K' },
-              { name: 'Valorant', emoji: '🔫', listings: '4.8K' },
-              { name: 'Diablo IV', emoji: '😈', listings: '3.7K' },
-              { name: 'Final Fantasy XIV', emoji: '🌟', listings: '3.2K' },
-              { name: 'CS2', emoji: '💣', listings: '2.9K' },
-              { name: 'Genshin Impact', emoji: '🌊', listings: '2.5K' },
-              { name: 'League of Legends', emoji: '🏆', listings: '2.1K' },
-              { name: 'Rocket League', emoji: '🚀', listings: '1.8K' },
-              { name: 'Apex Legends', emoji: '🎖️', listings: '1.5K' },
+              { name: 'World of Warcraft', emoji: 'âš”ï¸', listings: '12.4K' },
+              { name: 'OSRS', emoji: 'ðŸ¹', listings: '8.9K' },
+              { name: 'Path of Exile', emoji: 'ðŸ’€', listings: '6.2K' },
+              { name: 'Fortnite', emoji: 'ðŸŽ¯', listings: '5.1K' },
+              { name: 'Valorant', emoji: 'ðŸ”«', listings: '4.8K' },
+              { name: 'Diablo IV', emoji: 'ðŸ˜ˆ', listings: '3.7K' },
+              { name: 'Final Fantasy XIV', emoji: 'ðŸŒŸ', listings: '3.2K' },
+              { name: 'CS2', emoji: 'ðŸ’£', listings: '2.9K' },
+              { name: 'Genshin Impact', emoji: 'ðŸŒŠ', listings: '2.5K' },
+              { name: 'League of Legends', emoji: 'ðŸ†', listings: '2.1K' },
+              { name: 'Rocket League', emoji: 'ðŸš€', listings: '1.8K' },
+              { name: 'Apex Legends', emoji: 'ðŸŽ–ï¸', listings: '1.5K' },
             ].map(function(g) { return (
               <a key={g.name} href={'/browse?game=' + encodeURIComponent(g.name)} className="game-tile">
                 <div className="text-2xl mb-2">{g.emoji}</div>
@@ -328,16 +328,16 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── HOW IT WORKS ──────────────────────────────────────────────────── */}
+      {/* â”€â”€ HOW IT WORKS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section className="py-14 px-4 border-t" style={{ borderColor: 'hsl(var(--border)/0.5)', background: 'hsl(var(--card)/0.4)' }}>
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="text-3xl font-black mb-2">How Bounty Works</h2>
           <p className="text-muted-foreground mb-10">Buy and sell gaming goods safely in 3 simple steps</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { step: '1', title: 'Find a Listing', desc: 'Browse thousands of verified listings by game, category, price, and seller rating.', icon: '🔍' },
-              { step: '2', title: 'Place an Order', desc: 'Buy securely with escrow protection. Your funds are held until delivery is confirmed.', icon: '🛒' },
-              { step: '3', title: 'Receive & Review', desc: 'Get your items, confirm delivery, and leave a review to help the community.', icon: '✅' },
+              { step: '1', title: 'Find a Listing', desc: 'Browse thousands of verified listings by game, category, price, and seller rating.', icon: 'ðŸ”' },
+              { step: '2', title: 'Place an Order', desc: 'Buy securely with escrow protection. Your funds are held until delivery is confirmed.', icon: 'ðŸ›’' },
+              { step: '3', title: 'Receive & Review', desc: 'Get your items, confirm delivery, and leave a review to help the community.', icon: 'âœ…' },
             ].map(function(s) { return (
               <div key={s.step} className="flex flex-col items-center">
                 <div className="text-4xl mb-4">{s.icon}</div>
@@ -350,7 +350,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── FOOTER ─────────────────────────────────────────────────────────── */}
+      {/* â”€â”€ FOOTER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <footer className="border-t border-border py-10 px-4">
         <div className="mx-auto max-w-7xl">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
@@ -386,7 +386,7 @@ export default function Home() {
             </div>
           </div>
           <div className="border-t border-border pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-muted-foreground">© 2025 Bounty Gaming Marketplace. All rights reserved.</p>
+            <p className="text-xs text-muted-foreground">Â© 2025 Bounty Gaming Marketplace. All rights reserved.</p>
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
               Secured by escrow protection on every transaction
@@ -398,7 +398,7 @@ export default function Home() {
   );
 }
 
-// ── CLIENT-SIDE LISTING LOGIC (no JSX, runs in browser) ─────────────────────
+// â”€â”€ CLIENT-SIDE LISTING LOGIC (no JSX, runs in browser) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 var _game = '', _cat = '', _sort = '';
 
 function filterGame(btn, game) {
@@ -420,7 +420,7 @@ function sortListings(sort) { _sort = sort; loadListings(_game, _cat, _sort); }
 async function loadListings(game, cat, sort) {
   var grid = document.getElementById('listings-grid');
   if (!grid) return;
-  grid.innerHTML = '<div class="col-span-full text-center py-16 text-muted-foreground"><div class="auth-spinner mx-auto mb-3" style="border-top-color:var(--brand)"></div><p>Loading…</p></div>';
+  grid.innerHTML = '<div class="col-span-full text-center py-16 text-muted-foreground"><div class="auth-spinner mx-auto mb-3" style="border-top-color:var(--brand)"></div><p>Loadingâ€¦</p></div>';
   var params = new URLSearchParams({ limit: '16' });
   if (game) params.set('game', game);
   if (cat) params.set('category', cat);
@@ -440,10 +440,10 @@ async function loadListings(game, cat, sort) {
 
 function renderCard(l) {
   var stars = Math.round(l.sellerRating || 5);
-  var starStr = '★'.repeat(stars) + '☆'.repeat(5 - stars);
+  var starStr = 'â˜…'.repeat(stars) + 'â˜†'.repeat(5 - stars);
   var dot = l.isSellerOnline ? '<span class="online-dot"></span>' : '<span class="offline-dot"></span>';
   var verified = l.isSellerVerified ? '<span class="verified-badge"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Verified</span>' : '';
-  var gameLabel = l.game ? '<span class="text-xs px-2 py-0.5 rounded-full font-medium" style="background:rgba(108,71,255,0.1);color:#a78bfa">' + esc(l.game) + '</span>' : '';
+  var gameLabel = l.game ? '<span class="text-xs px-2 py-0.5 rounded-full font-medium" style="background:rgba(107,114,128,0.1);color:#d1d5db">' + esc(l.game) + '</span>' : '';
   return '<div class="listing-card">' +
     '<div class="flex items-center gap-2">' +
       '<div class="seller-avatar"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>' +
@@ -454,7 +454,7 @@ function renderCard(l) {
     '</div>' +
     '<div class="flex-1">' +
       '<p class="text-sm font-semibold leading-snug mb-1" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">' + esc(l.title) + '</p>' +
-      '<div class="flex items-center gap-3 text-xs text-muted-foreground"><span>⚡ ' + esc(l.deliveryTime || '1-24 hours') + '</span><span>✓ ' + (l.completionRate || 100) + '% done</span></div>' +
+      '<div class="flex items-center gap-3 text-xs text-muted-foreground"><span>âš¡ ' + esc(l.deliveryTime || '1-24 hours') + '</span><span>âœ“ ' + (l.completionRate || 100) + '% done</span></div>' +
     '</div>' +
     '<div class="flex items-end justify-between pt-2 border-t" style="border-color:hsl(var(--border)/0.5)">' +
       '<div><div class="text-xs text-muted-foreground mb-0.5">' + esc(l.priceUnit || 'per unit') + '</div><div class="text-lg font-black" style="color:var(--brand)">$' + Number(l.price).toFixed(2) + '</div></div>' +
@@ -464,3 +464,4 @@ function renderCard(l) {
 }
 
 function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+

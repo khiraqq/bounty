@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+﻿import { useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { exposeToWindow, initApp } from '../../utils/auth';
@@ -27,7 +27,7 @@ export default function Browse() {
   return (
     <>
       <Head>
-        <title>Browse Listings — Bounty Gaming Marketplace</title>
+        <title>Browse Listings â€” Bounty Gaming Marketplace</title>
         <meta name="description" content="Browse thousands of verified gaming listings. Buy gold, accounts, items and services." />
       </Head>
       <NavBar />
@@ -77,12 +77,12 @@ export default function Browse() {
             </div>
             {/* Sort bar */}
             <div className="flex items-center justify-between mb-4">
-              <p id="results-count" className="text-sm text-muted-foreground">Loading…</p>
+              <p id="results-count" className="text-sm text-muted-foreground">Loadingâ€¦</p>
               <div className="flex items-center gap-2">
                 <select id="sort-select" className="sort-select" onChange={e => sortListings(e.target.value)}>
                   <option value="">Featured</option>
-                  <option value="price_asc">Price: Low → High</option>
-                  <option value="price_desc">Price: High → Low</option>
+                  <option value="price_asc">Price: Low â†’ High</option>
+                  <option value="price_desc">Price: High â†’ Low</option>
                   <option value="rating">Top Rated</option>
                   <option value="newest">Newest</option>
                 </select>
@@ -98,7 +98,7 @@ export default function Browse() {
             <div id="listings-grid" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="col-span-full text-center py-16 text-muted-foreground">
                 <div className="auth-spinner mx-auto mb-3" style={{ borderTopColor: 'var(--brand)' }} />
-                <p>Loading listings…</p>
+                <p>Loading listingsâ€¦</p>
               </div>
             </div>
             {/* Pagination */}
@@ -140,12 +140,12 @@ function NavBar() {
             <Link href="/browse?category=Items" className="text-sm font-medium text-nav-foreground/80 hover:text-nav-foreground transition-colors">Items</Link>
             <Link href="/browse?category=Boosting" className="text-sm font-medium text-nav-foreground/80 hover:text-nav-foreground transition-colors">Boosting</Link>
             <Link href="/browse?category=Top Ups" className="text-sm font-medium text-nav-foreground/80 hover:text-nav-foreground transition-colors">Top Ups</Link>
-            <Link href="/become-a-seller" className="text-sm font-semibold px-3 py-1.5 rounded-md" style={{ background: 'rgba(108,71,255,0.1)', color: '#a78bfa', border: '1px solid rgba(108,71,255,0.2)' }}>Sell on Bounty</Link>
+            <Link href="/become-a-seller" className="text-sm font-semibold px-3 py-1.5 rounded-md" style={{ background: 'rgba(107,114,128,0.1)', color: '#d1d5db', border: '1px solid rgba(107,114,128,0.2)' }}>Sell on Bounty</Link>
           </div>
           <div className="ml-8 hidden md:flex items-center gap-3">
             <div className="flex items-center rounded-md bg-nav-foreground/10 px-3 py-1.5 text-sm text-nav-foreground/60 gap-2 w-48">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-              <input id="search-input" type="text" placeholder="Search listings…" className="bg-transparent outline-none text-sm w-full" onKeyDown={e => { if (e.key === 'Enter') doSearch(e.target.value); }} />
+              <input id="search-input" type="text" placeholder="Search listingsâ€¦" className="bg-transparent outline-none text-sm w-full" onKeyDown={e => { if (e.key === 'Enter') doSearch(e.target.value); }} />
             </div>
             <button id="login-button" onClick={() => window.openModal?.('login')} className="rounded-md border border-nav-foreground/20 bg-transparent px-4 py-1.5 text-sm font-medium text-nav-foreground/60 hover:text-nav-foreground hover:border-nav-foreground/40 transition">Log in</button>
             <div id="profile-area" className="hidden items-center gap-2">
@@ -266,7 +266,7 @@ function Footer() {
           </div>
         </div>
         <div className="border-t border-border pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-muted-foreground">© 2025 Bounty Gaming Marketplace. All rights reserved.</p>
+          <p className="text-xs text-muted-foreground">Â© 2025 Bounty Gaming Marketplace. All rights reserved.</p>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             Secured by escrow protection on every transaction
@@ -277,7 +277,7 @@ function Footer() {
   );
 }
 
-// ── CLIENT-SIDE LOGIC ──────────────────────────────────────────────────────────
+// â”€â”€ CLIENT-SIDE LOGIC â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 var _game = '', _cat = '', _sort = '', _page = 1, _view = 'grid';
 
 function filterGame(btn, game) {
@@ -320,7 +320,7 @@ async function loadListings(game, cat, sort, page) {
   _page = page || 1;
   var grid = document.getElementById('listings-grid');
   if (!grid) return;
-  grid.innerHTML = '<div class="col-span-full text-center py-16 text-muted-foreground"><div class="auth-spinner mx-auto mb-3" style="border-top-color:var(--brand)"></div><p>Loading…</p></div>';
+  grid.innerHTML = '<div class="col-span-full text-center py-16 text-muted-foreground"><div class="auth-spinner mx-auto mb-3" style="border-top-color:var(--brand)"></div><p>Loadingâ€¦</p></div>';
   var params = new URLSearchParams({ limit: '24', page: String(_page) });
   if (game) params.set('game', game);
   if (cat) params.set('category', cat);
@@ -358,17 +358,17 @@ function renderPagination(page, pages) {
   if (!pag || pages <= 1) { pag?.classList.add('hidden'); return; }
   pag.classList.remove('hidden');
   var html = '';
-  if (page > 1) html += '<button onclick="loadListings(\''+_game+'\',\''+_cat+'\',\''+_sort+'\','+(page-1)+')" class="pagination-btn">← Prev</button>';
+  if (page > 1) html += '<button onclick="loadListings(\''+_game+'\',\''+_cat+'\',\''+_sort+'\','+(page-1)+')" class="pagination-btn">â† Prev</button>';
   for (var i = Math.max(1, page-2); i <= Math.min(pages, page+2); i++) {
     html += '<button onclick="loadListings(\''+_game+'\',\''+_cat+'\',\''+_sort+'\','+i+')" class="pagination-btn'+(i===page?' active':'')+'">' + i + '</button>';
   }
-  if (page < pages) html += '<button onclick="loadListings(\''+_game+'\',\''+_cat+'\',\''+_sort+'\','+(page+1)+')" class="pagination-btn">Next →</button>';
+  if (page < pages) html += '<button onclick="loadListings(\''+_game+'\',\''+_cat+'\',\''+_sort+'\','+(page+1)+')" class="pagination-btn">Next â†’</button>';
   pag.innerHTML = html;
 }
 
 function renderCard(l) {
   var stars = Math.round(l.sellerRating || 5);
-  var starStr = '★'.repeat(stars) + '☆'.repeat(5 - stars);
+  var starStr = 'â˜…'.repeat(stars) + 'â˜†'.repeat(5 - stars);
   var dot = l.isSellerOnline ? '<span class="online-dot"></span>' : '<span class="offline-dot"></span>';
   var verified = l.isSellerVerified ? '<span class="verified-badge"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Verified</span>' : '';
   return '<a href="/listing/'+l._id+'" class="listing-card block">' +
@@ -378,11 +378,11 @@ function renderCard(l) {
         '<div class="flex items-center gap-1.5">' + dot + '<span class="text-sm font-semibold truncate">' + esc(l.sellerUsername) + '</span>' + verified + '</div>' +
         '<div class="text-xs text-muted-foreground"><span style="color:#f59e0b">' + starStr + '</span> <span>(' + (l.sellerReviews || 0) + ')</span></div>' +
       '</div>' +
-      (l.game ? '<span class="text-xs px-2 py-0.5 rounded-full font-medium" style="background:rgba(108,71,255,0.1);color:#a78bfa">' + esc(l.game) + '</span>' : '') +
+      (l.game ? '<span class="text-xs px-2 py-0.5 rounded-full font-medium" style="background:rgba(107,114,128,0.1);color:#d1d5db">' + esc(l.game) + '</span>' : '') +
     '</div>' +
     '<div class="flex-1">' +
       '<p class="text-sm font-semibold leading-snug mb-1 line-clamp-2">' + esc(l.title) + '</p>' +
-      '<div class="flex items-center gap-3 text-xs text-muted-foreground"><span>⚡ ' + esc(l.deliveryTime || '1-24 hours') + '</span><span>✓ ' + (l.completionRate || 100) + '%</span></div>' +
+      '<div class="flex items-center gap-3 text-xs text-muted-foreground"><span>âš¡ ' + esc(l.deliveryTime || '1-24 hours') + '</span><span>âœ“ ' + (l.completionRate || 100) + '%</span></div>' +
     '</div>' +
     '<div class="flex items-end justify-between pt-2 border-t" style="border-color:hsl(var(--border)/0.5)">' +
       '<div><div class="text-xs text-muted-foreground mb-0.5">' + esc(l.priceUnit || 'per unit') + '</div><div class="text-lg font-black" style="color:var(--brand)">$' + Number(l.price).toFixed(2) + '</div></div>' +
@@ -392,3 +392,4 @@ function renderCard(l) {
 }
 
 function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { exposeToWindow, initApp } from '../utils/auth';
@@ -47,9 +47,9 @@ export default function Dashboard() {
     try {
       const res = await fetch('/api/listings', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tok }, body: JSON.stringify(form) });
       const data = await res.json();
-      if (res.ok) { setCreateMsg('✅ Listing created!'); setShowCreate(false); loadData(); setForm(f => ({ ...f, title: '', description: '', price: '' })); }
-      else setCreateMsg('❌ ' + (data.message || 'Failed'));
-    } catch { setCreateMsg('❌ Network error'); }
+      if (res.ok) { setCreateMsg('âœ… Listing created!'); setShowCreate(false); loadData(); setForm(f => ({ ...f, title: '', description: '', price: '' })); }
+      else setCreateMsg('âŒ ' + (data.message || 'Failed'));
+    } catch { setCreateMsg('âŒ Network error'); }
     setCreating(false);
   };
 
@@ -65,7 +65,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <Head><title>Seller Dashboard — Bounty</title></Head>
+      <Head><title>Seller Dashboard â€” Bounty</title></Head>
       {/* Top bar */}
       <div className="bg-topbar text-topbar-foreground text-xs"><div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-1.5"><div /><div className="flex items-center gap-1"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg><span>24/7 Live Support</span></div><button id="theme-toggle" onClick={() => window.toggleTheme?.()}><svg className="h-4 w-4 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg><svg className="h-4 w-4 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9"/><path d="M20 3v4"/><path d="M22 5h-4"/></svg></button></div></div>
       <nav className="bg-nav border-b border-border"><div className="mx-auto flex max-w-7xl items-center px-4 py-2">
@@ -99,7 +99,7 @@ export default function Dashboard() {
         {/* Stats row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           {[
-            { label: 'Active Listings', value: listings.filter(l => l.isActive).length, icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>, color: '#6c47ff' },
+            { label: 'Active Listings', value: listings.filter(l => l.isActive).length, icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>, color: '#111111' },
             { label: 'Pending Orders', value: pendingOrders, icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>, color: '#f59e0b' },
             { label: 'Total Orders', value: orders.length, icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>, color: '#22c55e' },
             { label: 'Revenue', value: '$' + totalRevenue.toFixed(2), icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>, color: '#16a34a' },
@@ -118,7 +118,7 @@ export default function Dashboard() {
         {showCreate && (
           <div className="bg-card border border-border rounded-xl p-6 mb-6">
             <h2 className="font-bold mb-4">Create New Listing</h2>
-            {createMsg && <p className={'text-sm mb-3 px-3 py-2 rounded-md ' + (createMsg.startsWith('✅') ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400')}>{createMsg}</p>}
+            {createMsg && <p className={'text-sm mb-3 px-3 py-2 rounded-md ' + (createMsg.startsWith('âœ…') ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400')}>{createMsg}</p>}
             <form onSubmit={handleCreate} className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="md:col-span-2">
                 <label className="text-sm font-medium block mb-1">Listing Title *</label>
@@ -159,7 +159,7 @@ export default function Dashboard() {
                 <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} placeholder="Describe your listing, delivery method, requirements..." className="seller-form-textarea" rows={3} />
               </div>
               <div className="md:col-span-2 flex gap-3">
-                <button type="submit" disabled={creating} className="btn-primary px-6">{creating ? 'Creating…' : 'Create Listing'}</button>
+                <button type="submit" disabled={creating} className="btn-primary px-6">{creating ? 'Creatingâ€¦' : 'Create Listing'}</button>
                 <button type="button" onClick={() => setShowCreate(false)} className="btn-outline px-6">Cancel</button>
               </div>
             </form>
@@ -193,7 +193,7 @@ export default function Dashboard() {
                     <span className={'text-xs px-2 py-0.5 rounded-full font-bold ' + (l.isActive ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-400')}>{l.isActive ? 'Active' : 'Inactive'}</span>
                     <span className="text-xs px-2 py-0.5 rounded-full border border-border">{l.category}</span>
                   </div>
-                  <div className="text-sm text-muted-foreground">{l.game} · {l.priceUnit} · ${l.price?.toFixed(2)}</div>
+                  <div className="text-sm text-muted-foreground">{l.game} Â· {l.priceUnit} Â· ${l.price?.toFixed(2)}</div>
                 </div>
                 <div className="flex gap-2">
                   <Link href={'/listing/' + l._id} className="edit-btn">View</Link>
@@ -213,11 +213,11 @@ export default function Dashboard() {
                     <span className="font-semibold">{o.title || o.game}</span>
                     <span className="text-xs px-2 py-0.5 rounded-full font-bold" style={{ background: { pending: 'rgba(234,179,8,0.12)', active: 'rgba(59,130,246,0.12)', completed: 'rgba(22,163,74,0.12)' }[o.status] || 'rgba(107,114,128,0.1)', color: { pending: '#ca8a04', active: '#3b82f6', completed: '#16a34a' }[o.status] || '#6b7280' }}>{o.status?.toUpperCase()}</span>
                   </div>
-                  <div className="text-sm text-muted-foreground">Buyer: <strong className="text-foreground">{o.buyerUsername}</strong> · Qty: {(o.quantity || 1).toLocaleString()} · {new Date(o.createdAt).toLocaleDateString()}</div>
+                  <div className="text-sm text-muted-foreground">Buyer: <strong className="text-foreground">{o.buyerUsername}</strong> Â· Qty: {(o.quantity || 1).toLocaleString()} Â· {new Date(o.createdAt).toLocaleDateString()}</div>
                 </div>
                 <div className="text-right">
                   <div className="text-lg font-black" style={{ color: 'var(--brand)' }}>${(o.total || 0).toFixed(2)}</div>
-                  <button onClick={() => window.location.href = '/messages?to=' + o.buyerUsername} className="text-xs text-muted-foreground hover:text-foreground transition-colors">Message buyer →</button>
+                  <button onClick={() => window.location.href = '/messages?to=' + o.buyerUsername} className="text-xs text-muted-foreground hover:text-foreground transition-colors">Message buyer â†’</button>
                 </div>
               </div>
             ))}
@@ -236,3 +236,4 @@ export default function Dashboard() {
     </>
   );
 }
+
