@@ -1,0 +1,1 @@
+{ "extends": ["next/core-web-vitals"], "rules": { "react/jsx-indent": "off", "prettier/prettier": "off" } }
