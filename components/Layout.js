@@ -1,8 +1,11 @@
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { exposeToWindow, initApp } from '../utils/auth';
+import { useRouter } from 'next/router';
 
 export default function Layout({ children }) {
+  const router = useRouter();
+  const isSellerPage = router.pathname === '/become-a-seller';
   useEffect(() => {
     exposeToWindow();
     initApp();
@@ -176,7 +179,168 @@ export default function Layout({ children }) {
         </div>
       </div>
 
-      <nav className="bg-nav border-b border-border sticky top-0 z-40">
+      {!isSellerPage && (
+        <nav className="bg-nav border-b border-border sticky top-0 z-40">
+          <div className="mx-auto flex max-w-7xl items-center gap-1 px-4 py-2.5">
+            <Link
+              href="/"
+              className="shrink-0 font-black text-2xl text-foreground mr-6"
+              style={{ fontFamily: "'Doto', sans-serif", letterSpacing: '-0.02em' }}
+            >
+              Bounty
+            </Link>
+
+            <div className="hidden md:flex items-center">
+              <Link href="/browse" className="nav-link">
+                Browse
+              </Link>
+              <Link href="/browse?category=Currency" className="nav-link">
+                Currency
+              </Link>
+              <Link href="/browse?category=Accounts" className="nav-link">
+                Accounts
+              </Link>
+              <Link href="/browse?category=Items" className="nav-link">
+                Items
+              </Link>
+              <Link href="/browse?category=Boosting" className="nav-link">
+                Boosting
+              </Link>
+              <Link href="/browse?category=Top+Ups" className="nav-link">
+                Top Ups
+              </Link>
+            </div>
+
+            <div className="ml-auto flex items-center gap-2">
+              <div className="hidden lg:flex items-center rounded-lg border border-border bg-secondary px-3 py-1.5 gap-2 w-48 focus-within:border-foreground/30 transition-colors">
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-muted-foreground shrink-0"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.35-4.35" />
+                </svg>
+                <input
+                  type="text"
+                  placeholder="Search listings…"
+                  className="bg-transparent outline-none text-sm w-full text-foreground placeholder:text-muted-foreground"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && e.currentTarget.value) {
+                      window.location.href = '/browse?q=' + encodeURIComponent(e.currentTarget.value);
+                    }
+                  }}
+                />
+              </div>
+              <div id="auth-buttons" className="flex items-center gap-2">
+                <button
+                  onClick={() => window.openModal?.('login')}
+                  className="px-3.5 py-1.5 rounded-lg text-sm font-medium border border-border text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors"
+                >
+                  Log in
+                </button>
+                <button
+                  onClick={() => window.openModal?.('signup')}
+                  className="px-3.5 py-1.5 rounded-lg text-sm font-semibold bg-foreground text-background hover:opacity-80 transition-opacity"
+                >
+                  Sign up
+                </button>
+              </div>
+              <div id="profile-area" className="hidden items-center gap-1">
+                <Link href="/messages" className="nav-icon-btn" title="Messages">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                  </svg>
+                </Link>
+                <button id="notifications-button" className="nav-icon-btn relative" title="Notifications">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+                    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+                  </svg>
+                </button>
+                <div className="relative">
+                  <button
+                    id="profile-button"
+                    onClick={() => window.toggleProfileDropdown?.()}
+                    className="h-8 w-8 rounded-full border border-border overflow-hidden hover:border-foreground/40 transition-colors flex items-center justify-center bg-secondary"
+                  >
+                    <div id="profile-avatar" className="w-full h-full flex items-center justify-center text-muted-foreground">
+                      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                      </svg>
+                    </div>
+                  </button>
+                  <div id="profile-dropdown" className="hidden absolute right-0 top-full mt-2 w-56 rounded-xl border border-border bg-card shadow-2xl z-50 overflow-hidden">
+                    <div className="flex items-center gap-3 px-4 py-3 border-b border-border">
+                      <div id="dropdown-avatar" className="h-9 w-9 rounded-full bg-secondary border border-border flex items-center justify-center shrink-0">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                          <circle cx="12" cy="7" r="4" />
+                        </svg>
+                      </div>
+                      <div className="min-w-0">
+                        <p id="dropdown-username" className="text-sm font-semibold truncate" />
+                        <p id="dropdown-balance" className="text-xs text-muted-foreground">$0.00</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-2 px-3 py-2 border-b border-border">
+                      <Link href="/deposit" className="flex-1 text-center text-xs font-semibold py-1.5 rounded-lg bg-foreground text-background hover:opacity-80 transition-opacity">
+                        Deposit
+                      </Link>
+                      <button className="flex-1 text-xs font-semibold py-1.5 rounded-lg border border-border hover:bg-secondary transition-colors">
+                        Withdraw
+                      </button>
+                    </div>
+                    <div className="py-1">
+                      {[
+                        { href: '/orders', icon: 'M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z M3 6h18 M16 10a4 4 0 0 1-8 0', label: 'Orders' },
+                        { href: '/dashboard', icon: 'M3 3h7v7H3z M14 3h7v7h-7z M14 14h7v7h-7z M3 14h7v7H3z', label: 'Seller Dashboard' },
+                        { href: '/become-a-seller', icon: 'M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2 M16 3.13a4 4 0 0 1 0 7.75 M12 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0', label: 'Become a Seller' },
+                        { href: '/deposit', icon: 'M2 5h20a2 2 0 0 1 0 14H2z M2 10h20', label: 'Wallet' },
+                        { href: '/messages', icon: 'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z', label: 'Messages' },
+                        { href: '/account-settings', icon: 'M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16z M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z', label: 'Account Settings' },
+                      ].map(({ href, icon, label }) => (
+                        <Link key={href} href={href} className="dropdown-item" onClick={() => window.closeProfileDropdown?.()}>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            {icon.split(' ').map((d, i) => (
+                              <path key={i} d={d} />
+                            ))}
+                          </svg>
+                          {label}
+                        </Link>
+                      ))}
+                    </div>
+                    <div className="border-t border-border py-1">
+                      <button
+                        onClick={() => {
+                          window.logout?.();
+                          window.closeProfileDropdown?.();
+                        }}
+                        className="dropdown-item w-full text-left text-red-500 hover:bg-red-500/5"
+                      >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                          <polyline points="16 17 21 12 16 7" />
+                          <line x1="21" y1="12" x2="9" y2="12" />
+                        </svg>
+                        Log out
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      )}
         <div className="mx-auto flex max-w-7xl items-center gap-1 px-4 py-2.5">
           <Link
             href="/"
