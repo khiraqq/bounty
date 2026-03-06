@@ -3,6 +3,9 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { exposeToWindow, initApp } from '../utils/auth';
 
+const AUTH_FORM_BUTTON_CLASS =
+  "inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-0 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 bg-linear-to-b from-zinc-700 to-zinc-800 text-white inset-shadow-[0_1px_2px] inset-shadow-white/50 transition-colors text-shadow-xs hover:to-zinc-700 dark:from-zinc-600 dark:to-zinc-700 dark:inset-shadow-white/30 dark:hover:to-zinc-600 h-8 px-4 w-full";
+
 export default function Layout({ children }) {
   const router = useRouter();
   const isSellerPage = router.pathname === '/become-a-seller';
@@ -211,7 +214,7 @@ export default function Layout({ children }) {
 
       <main>{children}</main>
 
-      <div id="modal-overlay" className="hidden fixed inset-0 z-50 items-center justify-center" onClick={(e) => window.handleOverlayClick?.(e)}>
+      <div id="modal-overlay" className="hidden fixed inset-0 z-50 flex items-center justify-center" onClick={(e) => window.handleOverlayClick?.(e)}>
         <div id="modal-backdrop" className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
         <div className="relative z-10 w-full max-w-md mx-4 bg-card rounded-2xl p-8 shadow-2xl border border-border" onClick={(e) => e.stopPropagation()}>
           <button onClick={() => window.closeModal?.()} className="absolute right-4 top-4 text-muted-foreground hover:text-foreground transition-colors">
@@ -246,7 +249,14 @@ export default function Layout({ children }) {
                   className="w-full h-10 px-3 rounded-lg bg-background border border-input text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
                 />
               </div>
-              <button id="login-submit-btn" type="submit" className="btn-brand mt-1">Log in</button>
+              <button
+                id="login-submit-btn"
+                type="submit"
+                data-slot="button"
+                className={AUTH_FORM_BUTTON_CLASS}
+              >
+                Login
+              </button>
             </form>
             <div className="auth-divider"><div className="line" /><span>or continue with</span><div className="line" /></div>
             <button type="button" onClick={() => window.handleGoogleOAuth?.()} className="btn-google mb-2">
@@ -281,10 +291,6 @@ export default function Layout({ children }) {
                 <input id="signup-username" type="text" placeholder="Your username" autoComplete="username" className="w-full h-10 px-3 rounded-lg bg-background border border-input text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring" />
               </div>
               <div>
-                <label className="text-sm font-medium block mb-1.5">Email</label>
-                <input id="signup-email" type="email" placeholder="you@example.com" autoComplete="email" className="w-full h-10 px-3 rounded-lg bg-background border border-input text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring" />
-              </div>
-              <div>
                 <label className="text-sm font-medium block mb-1.5">Password</label>
                 <input id="signup-password" type="password" placeholder="Min 8 characters" autoComplete="new-password" className="w-full h-10 px-3 rounded-lg bg-background border border-input text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring" />
               </div>
@@ -292,7 +298,14 @@ export default function Layout({ children }) {
                 <label className="text-sm font-medium block mb-1.5">Confirm Password</label>
                 <input id="signup-confirm-password" type="password" placeholder="Repeat password" autoComplete="new-password" className="w-full h-10 px-3 rounded-lg bg-background border border-input text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring" />
               </div>
-              <button id="signup-submit-btn" type="submit" className="btn-brand mt-1">Create account</button>
+              <button
+                id="signup-submit-btn"
+                type="submit"
+                data-slot="button"
+                className={AUTH_FORM_BUTTON_CLASS}
+              >
+                Sign Up
+              </button>
             </form>
             <div className="auth-divider">
               <div className="line" />
