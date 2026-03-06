@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { motion, AnimatePresence } from 'framer-motion';
+import { AUTH_FORM_BUTTON_CLASS, CTA_BUTTON_STYLE } from '../Layout';
 
 const EXPECTATIONS = [
   {
@@ -156,17 +157,8 @@ export default function SellerIntroModal({ show, onBack, onContinue }) {
                 </button>
                 <button
                   onClick={onContinue}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-foreground transition-all"
-                  style={{
-                    background: '#E8A020',
-                    boxShadow: '0 4px 16px rgba(232,160,32,0.3)',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = '#D4901A';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = '#E8A020';
-                  }}
+                  className={`${AUTH_FORM_BUTTON_CLASS} flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold`}
+                  style={CTA_BUTTON_STYLE}
                 >
                   Continue to verification
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

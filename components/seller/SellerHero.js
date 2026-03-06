@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { AUTH_FORM_BUTTON_CLASS } from "../Layout";
+import { AUTH_FORM_BUTTON_CLASS, CTA_BUTTON_STYLE } from "../Layout";
 
 const STATS = [
   { label: "Secure escrow", sub: "Every trade protected" },
@@ -117,6 +117,7 @@ export default function SellerHero({ onStartSelling }) {
               onClick={handleClick}
               disabled={clicking}
               className={CTA_BUTTON_CLASS}
+              style={CTA_BUTTON_STYLE}
             >
               <span>{clicking ? "Opening…" : "Start Selling"}</span>
               <motion.span
