@@ -302,22 +302,6 @@ export default function DepositPage() {
         <style dangerouslySetInnerHTML={{ __html: PAGE_STYLES }} />
       </Head>
 
-      {/* NAV */}
-      <nav className="bg-nav border-b border-border/40">
-        <div className="mx-auto flex max-w-7xl items-center px-4 py-3 gap-4">
-          <Link href="/" className="font-bold text-xl text-nav-foreground" style={{ fontFamily: "'Doto',sans-serif" }}>
-            Bounty
-          </Link>
-          <span className="text-muted-foreground">/</span>
-          <span className="text-sm font-medium">Deposit</span>
-          <div className="ml-auto">
-            <button id="theme-toggle" onClick={function () { window.toggleTheme && window.toggleTheme(); }} className="text-muted-foreground hover:text-foreground p-1.5 rounded-md hover:bg-accent transition-colors" aria-label="Toggle theme">
-              <span className="dark:hidden"><IcoSun /></span>
-              <span className="hidden dark:inline"><IcoMoon /></span>
-            </button>
-          </div>
-        </div>
-      </nav>
 
       <div className="mx-auto max-w-lg px-4 py-8">
 

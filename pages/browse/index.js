@@ -30,7 +30,6 @@ export default function Browse() {
         <title>Browse Listings â€” Bounty Gaming Marketplace</title>
         <meta name="description" content="Browse thousands of verified gaming listings. Buy gold, accounts, items and services." />
       </Head>
-      <NavBar />
       <div className="mx-auto max-w-7xl px-4 py-8">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
@@ -106,126 +105,8 @@ export default function Browse() {
           </div>
         </div>
       </div>
-      <AuthModal />
       <Footer />
     </>
-  );
-}
-
-function NavBar() {
-  return (
-    <>
-      <div className="bg-topbar text-topbar-foreground text-xs">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-1.5">
-          <div />
-          <div className="flex items-center gap-1">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
-            <span>24/7 Live Support</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <button id="theme-toggle" onClick={() => window.toggleTheme?.()} aria-label="Toggle theme">
-              <svg className="h-4 w-4 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
-              <svg className="h-4 w-4 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9"/><path d="M20 3v4"/><path d="M22 5h-4"/></svg>
-            </button>
-          </div>
-        </div>
-      </div>
-      <nav className="bg-nav border-b border-border">
-        <div className="mx-auto flex max-w-7xl items-center px-4 py-2">
-          <Link href="/" className="flex shrink-0 items-center text-nav-foreground font-bold text-2xl" style={{ fontFamily: "'Doto',sans-serif" }}>Bounty</Link>
-          <div className="ml-auto hidden md:flex items-center gap-6">
-            <Link href="/browse" className="text-sm font-medium text-nav-foreground/80 hover:text-nav-foreground transition-colors">Browse</Link>
-            <Link href="/browse?category=Accounts" className="text-sm font-medium text-nav-foreground/80 hover:text-nav-foreground transition-colors">Accounts</Link>
-            <Link href="/browse?category=Currency" className="text-sm font-medium text-nav-foreground/80 hover:text-nav-foreground transition-colors">Currency</Link>
-            <Link href="/browse?category=Items" className="text-sm font-medium text-nav-foreground/80 hover:text-nav-foreground transition-colors">Items</Link>
-            <Link href="/browse?category=Boosting" className="text-sm font-medium text-nav-foreground/80 hover:text-nav-foreground transition-colors">Boosting</Link>
-            <Link href="/browse?category=Top Ups" className="text-sm font-medium text-nav-foreground/80 hover:text-nav-foreground transition-colors">Top Ups</Link>
-            <Link href="/become-a-seller" className="text-sm font-semibold px-3 py-1.5 rounded-md" style={{ background: 'rgba(107,114,128,0.1)', color: '#d1d5db', border: '1px solid rgba(107,114,128,0.2)' }}>Sell on Bounty</Link>
-          </div>
-          <div className="ml-8 hidden md:flex items-center gap-3">
-            <div className="flex items-center rounded-md bg-nav-foreground/10 px-3 py-1.5 text-sm text-nav-foreground/60 gap-2 w-48">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-              <input id="search-input" type="text" placeholder="Search listingsâ€¦" className="bg-transparent outline-none text-sm w-full" onKeyDown={e => { if (e.key === 'Enter') doSearch(e.target.value); }} />
-            </div>
-            <button id="login-button" onClick={() => window.openModal?.('login')} className="rounded-md border border-nav-foreground/20 bg-transparent px-4 py-1.5 text-sm font-medium text-nav-foreground/60 hover:text-nav-foreground hover:border-nav-foreground/40 transition">Log in</button>
-            <div id="profile-area" className="hidden items-center gap-2">
-              <Link href="/messages" className="nav-icon-btn" title="Messages"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></Link>
-              <button className="nav-icon-btn relative" title="Notifications"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></button>
-              <div className="relative">
-                <button id="profile-button" type="button" onClick={() => window.toggleProfileDropdown?.()} className="h-8 w-8 rounded-full flex items-center justify-center overflow-hidden">
-                  <div id="profile-avatar" className="w-full h-full rounded-full flex items-center justify-center" style={{ backgroundColor: '#0a0a0a', color: '#fff', border: '1px solid #27272a' }}>
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                  </div>
-                </button>
-                <div id="profile-dropdown" className="hidden absolute right-0 top-full mt-2 w-56 rounded-lg border border-border bg-card shadow-xl z-50 overflow-hidden">
-                  <div className="flex items-center gap-3 px-4 py-3 border-b border-border">
-                    <div id="dropdown-avatar" className="h-9 w-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#0a0a0a', color: '#fff', border: '1px solid #27272a' }}>
-                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                    </div>
-                    <div className="min-w-0"><p id="dropdown-username" className="text-sm font-semibold text-foreground truncate" /><p className="text-xs text-muted-foreground">$0.00</p></div>
-                  </div>
-                  <div className="flex gap-2 px-3 py-2 border-b border-border">
-                    <Link href="/deposit" className="flex-1 text-center text-xs font-semibold py-1.5 rounded-md" style={{ background: '#16a34a', color: 'white' }}>Deposit</Link>
-                    <button className="flex-1 text-xs font-semibold py-1.5 rounded-md border border-border hover:bg-accent transition-colors">Withdraw</button>
-                  </div>
-                  <div className="py-1">
-                    <Link href="/orders" className="dropdown-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Orders</Link>
-                    <Link href="/messages" className="dropdown-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Messages</Link>
-                    <Link href="/account-settings" className="dropdown-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 0 0 4.93 19.07"/></svg>Settings</Link>
-                  </div>
-                  <div className="border-t border-border py-1">
-                    <button onClick={() => { window.logout?.(); window.closeProfileDropdown?.(); }} className="dropdown-item w-full text-left" style={{ color: '#ef4444' }}>
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                      Log out
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
-    </>
-  );
-}
-
-function AuthModal() {
-  return (
-    <div id="modal-overlay" className="hidden fixed inset-0 z-50 flex items-center justify-center" onClick={e => window.handleOverlayClick?.(e)}>
-      <div id="modal-backdrop" className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-      <div className="relative z-10 w-full max-w-md mx-4 bg-card text-card-foreground rounded-xl p-8 shadow-2xl border border-border" onClick={e => e.stopPropagation()}>
-        <button type="button" onClick={() => window.closeModal?.()} className="absolute right-4 top-4 text-muted-foreground hover:text-foreground"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-        <div id="login-modal">
-          <h2 className="text-2xl font-bold text-center mb-1" style={{ fontFamily: "'Doto',monospace" }}>Welcome back</h2>
-          <p className="text-sm text-muted-foreground text-center mb-6">Sign in to your Bounty account</p>
-          <p id="login-error" className="hidden text-sm text-red-500 mb-4 text-center rounded-md bg-red-500/10 px-3 py-2" />
-          <form id="login-form" className="space-y-3" onSubmit={e => window.handleLoginSubmit?.(e)}>
-            <div><label className="text-sm font-medium block mb-1.5">Username</label><input id="login-username" type="text" placeholder="Your username" className="w-full h-10 px-3 rounded-md bg-background border border-input text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring" /></div>
-            <div><label className="text-sm font-medium block mb-1.5">Password</label><input id="login-password" type="password" placeholder="Your password" className="w-full h-10 px-3 rounded-md bg-background border border-input text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring" /></div>
-            <button id="login-submit-btn" type="submit" className="btn-brand mt-1">Login</button>
-          </form>
-          <div className="auth-divider"><div className="line" /><span>or</span><div className="line" /></div>
-          <button type="button" onClick={() => window.handleDiscordOAuth?.()} className="btn-discord">
-            <svg width="18" height="14" viewBox="0 0 71 55" fill="currentColor"><path d="M60.1 4.9A58.5 58.5 0 0045.4.2a.2.2 0 00-.2.1 40.8 40.8 0 00-1.8 3.7 54 54 0 00-16.2 0A37.3 37.3 0 0025.4.3a.2.2 0 00-.2-.1A58.4 58.4 0 0010.5 4.9a.2.2 0 00-.1.1C1.5 18.7-.9 32.2.3 45.5v.1a58.7 58.7 0 0017.7 9 .2.2 0 00.3-.1 42 42 0 003.6-5.9.2.2 0 00-.1-.3 38.6 38.6 0 01-5.5-2.6.2.2 0 010-.4l1.1-.9a.2.2 0 01.2 0 41.9 41.9 0 0035.6 0 .2.2 0 01.2 0l1.1.9a.2.2 0 010 .3 36.3 36.3 0 01-5.5 2.7.2.2 0 00-.1.3 47.2 47.2 0 003.6 5.9.2.2 0 00.3.1A58.5 58.5 0 0070.3 45.6v-.1C71.7 30.1 67.8 16.7 60.2 5a.2.2 0 00-.1-.1zM23.7 37.3c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2c3.6 0 6.5 3.3 6.4 7.2 0 4-2.8 7.2-6.4 7.2zm23.7 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2c3.6 0 6.5 3.3 6.4 7.2 0 4-2.8 7.2-6.4 7.2z"/></svg>
-            Continue with Discord
-          </button>
-          <p className="text-center text-sm mt-5 text-muted-foreground">No account? <button type="button" onClick={() => window.switchView?.('signup')} className="text-foreground underline font-medium">Sign up</button></p>
-        </div>
-        <div id="signup-modal" className="hidden">
-          <h2 className="text-2xl font-bold text-center mb-1" style={{ fontFamily: "'Doto',monospace" }}>Create account</h2>
-          <p className="text-sm text-muted-foreground text-center mb-6">Join thousands of traders on Bounty</p>
-          <p id="signup-error" className="hidden text-sm text-red-500 mb-4 text-center rounded-md bg-red-500/10 px-3 py-2" />
-          <form id="signup-form" className="space-y-3" onSubmit={e => window.handleSignupSubmit?.(e)}>
-            <div><label className="text-sm font-medium block mb-1.5">Username</label><input id="signup-username" type="text" placeholder="Your username" className="w-full h-10 px-3 rounded-md bg-background border border-input text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring" /></div>
-            <div><label className="text-sm font-medium block mb-1.5">Email</label><input id="signup-email" type="email" placeholder="you@example.com" className="w-full h-10 px-3 rounded-md bg-background border border-input text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring" /></div>
-            <div><label className="text-sm font-medium block mb-1.5">Password</label><input id="signup-password" type="password" placeholder="Your password" className="w-full h-10 px-3 rounded-md bg-background border border-input text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring" /></div>
-            <div><label className="text-sm font-medium block mb-1.5">Confirm Password</label><input id="signup-confirm-password" type="password" placeholder="Confirm password" className="w-full h-10 px-3 rounded-md bg-background border border-input text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring" /></div>
-            <button id="signup-submit-btn" type="submit" className="btn-brand mt-1">Sign Up</button>
-          </form>
-          <p className="text-center text-sm mt-5 text-muted-foreground">Have an account? <button type="button" onClick={() => window.switchView?.('login')} className="text-foreground underline font-medium">Login</button></p>
-        </div>
-      </div>
-    </div>
   );
 }
 

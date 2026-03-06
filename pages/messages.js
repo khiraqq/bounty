@@ -282,24 +282,6 @@ export default function MessagesPage() {
         <style dangerouslySetInnerHTML={{ __html: PAGE_STYLES }} />
       </Head>
 
-      {/* NAV */}
-      <nav className="bg-nav border-b border-border/40">
-        <div className="mx-auto flex max-w-7xl items-center px-4 py-3 gap-4">
-          <Link href="/" className="font-bold text-xl text-nav-foreground" style={{ fontFamily: "'Doto',sans-serif" }}>Bounty</Link>
-          <span className="text-muted-foreground">/</span>
-          <span className="text-sm font-medium">Messages</span>
-          <div className="ml-auto flex items-center gap-2">
-            <button className={notifBtnClass()} onClick={requestNotifications} disabled={notifStatus === 'denied' || notifStatus === 'unsupported'} title={notifStatus === 'denied' ? 'Notifications blocked â€” please allow in browser settings' : ''}>
-              {notifStatus === 'granted' ? <IcoBell /> : <IcoBellOff />}
-              {notifLabel()}
-            </button>
-            <button id="theme-toggle" onClick={function () { window.toggleTheme && window.toggleTheme(); }} className="text-muted-foreground hover:text-foreground p-1.5 rounded-md hover:bg-accent transition-colors" aria-label="Toggle theme">
-              <span className="dark:hidden"><IcoSun /></span>
-              <span className="hidden dark:inline"><IcoMoon /></span>
-            </button>
-          </div>
-        </div>
-      </nav>
 
       {/* MESSAGES LAYOUT */}
       <div className="mx-auto max-w-7xl" style={{ height: 'calc(100vh - 57px)', display: 'flex', overflow: 'hidden' }}>
