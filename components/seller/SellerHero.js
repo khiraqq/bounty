@@ -1,11 +1,14 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { AUTH_FORM_BUTTON_CLASS } from "../Layout";
 
 const STATS = [
-  { label: 'Secure escrow', sub: 'Every trade protected' },
-  { label: 'Global reach', sub: 'Millions of buyers worldwide' },
-  { label: 'Fast payouts', sub: 'Withdraw anytime' },
+  { label: "Secure escrow", sub: "Every trade protected" },
+  { label: "Global reach", sub: "Millions of buyers worldwide" },
+  { label: "Fast payouts", sub: "Withdraw anytime" },
 ];
+
+const CTA_BUTTON_CLASS = `${AUTH_FORM_BUTTON_CLASS} px-6 py-3 text-base font-semibold rounded-2xl w-auto`;
 
 function MascotIllustration() {
   return (
@@ -15,7 +18,10 @@ function MascotIllustration() {
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
       className="relative select-none"
     >
-      <motion.div animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 3.5, ease: 'easeInOut' }}>
+      <motion.div
+        animate={{ y: [0, -10, 0] }}
+        transition={{ repeat: Infinity, duration: 3.5, ease: "easeInOut" }}
+      >
         <svg width="320" height="300" viewBox="0 0 320 300" fill="none" xmlns="http://www.w3.org/2000/svg">
           <ellipse cx="160" cy="285" rx="80" ry="12" fill="black" fillOpacity="0.25" />
           <ellipse cx="160" cy="185" rx="72" ry="78" fill="#E8A020" />
@@ -68,23 +74,22 @@ export default function SellerHero({ onStartSelling }) {
     setClicking(true);
     await new Promise((r) => setTimeout(r, 700));
     onStartSelling();
-    setClicking(false);
   };
 
   return (
-    <section className="relative min-h-[520px] flex flex-col overflow-hidden bg-background">
+    <section className="relative min-h-[520px] flex flex-col overflow-hidden bg-[hsl(var(--background))]">
       <div
-        className="absolute inset-0 pointer-events-none opacity-[0.045]"
+        className="absolute inset-0 pointer-events-none opacity-[0.04]"
         style={{
           backgroundImage: `
             linear-gradient(hsl(var(--foreground)) 1px, transparent 1px),
             linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)
           `,
-          backgroundSize: '40px 40px',
+          backgroundSize: "40px 40px",
         }}
       />
 
-      <div className="relative z-10 mx-auto max-w-7xl w-full px-6 pt-16 pb-0 flex items-center justify-between gap-8">
+      <div className="relative z-10 mx-auto max-w-7xl w-full px-6 pt-16 pb-2 flex items-center justify-between gap-8">
         <div className="flex-1 max-w-xl">
           <motion.h1
             initial={{ opacity: 0, y: 24 }}
@@ -92,8 +97,8 @@ export default function SellerHero({ onStartSelling }) {
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="text-5xl md:text-6xl font-black leading-[1.05] tracking-tight text-foreground mb-5"
           >
-            Start making <br />
-            money on <span className="text-foreground">Bounty</span>
+            Start making<br />money on<br />
+            <span className="text-foreground">Bounty</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
@@ -103,39 +108,40 @@ export default function SellerHero({ onStartSelling }) {
           >
             Reach millions of verified gamers who buy gaming goods daily from sellers like you.
           </motion.p>
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.18 }}>
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.18 }}
+          >
             <button
               onClick={handleClick}
               disabled={clicking}
-              className="group relative inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl font-bold text-base transition-all duration-200 overflow-hidden"
-              style={{
-                background: '#E8A020',
-                color: '#111',
-                boxShadow: '0 4px 20px rgba(232, 160, 32, 0.35)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = '#D4901A';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = '#E8A020';
-              }}
+              className={CTA_BUTTON_CLASS}
             >
-              <span>{clicking ? 'Opening…' : 'Start Selling'}</span>
+              <span>{clicking ? "Opening…" : "Start Selling"}</span>
               <motion.span
                 animate={
                   clicking
-                    ? { x: [0, 6, 0, 6, 0], opacity: [1, 0.5, 1, 0.5, 1] }
+                    ? { x: [0, 6, 0, 6, 0], opacity: [1, 1, 1, 1, 1] }
                     : { x: 0 }
                 }
-                transition={{ duration: 0.6, ease: 'easeInOut' }}
+                transition={{ duration: 0.6, ease: "easeInOut" }}
                 className="text-lg font-black"
               >
                 {clicking ? (
-                  <motion.span animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 0.6, ease: 'linear' }} className="inline-block">
+                  <motion.span
+                    animate={{ rotate: 360 }}
+                    transition={{ repeat: Infinity, duration: 0.6, ease: "linear" }}
+                    className="inline-block"
+                  >
                     ↻
                   </motion.span>
                 ) : (
-                  <motion.span animate={{ x: [0, 3, 0] }} transition={{ repeat: Infinity, duration: 1.4, ease: 'easeInOut' }} className="inline-block">
+                  <motion.span
+                    className="inline-block"
+                    animate={{ x: [0, 3, 0] }}
+                    transition={{ repeat: Infinity, duration: 1.4, ease: "easeInOut" }}
+                  >
                     ›
                   </motion.span>
                 )}
@@ -143,10 +149,12 @@ export default function SellerHero({ onStartSelling }) {
             </button>
           </motion.div>
         </div>
+
         <div className="hidden md:block flex-shrink-0">
           <MascotIllustration />
         </div>
       </div>
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
