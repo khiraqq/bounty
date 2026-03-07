@@ -13,4 +13,4 @@ export const INPUT_FIELD_CLASS =
   "flex h-10 w-full rounded-md border border-[#1a1a1a] bg-[#0d0d0d] px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:border-foreground focus-visible:ring-1 focus-visible:ring-ring outline-none";
 
 export const CAPTCHA_INPUT_CLASS =
-  "flex h-12 w-full rounded-md border border-[#1a1a1a] bg-[#0d0d0d] px-3 py-2 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 flex-1 font-mono tracking-widest uppercase text-center text-lg";
+  "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 flex-1 font-mono tracking-widest uppercase text-center text-lg";

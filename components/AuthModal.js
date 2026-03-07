@@ -1,3 +1,4 @@
+﻿import { AnimatePresence, motion } from 'framer-motion';
 import {
   AUTH_FORM_BUTTON_CLASS,
   CAPTCHA_INPUT_CLASS,
@@ -5,33 +6,87 @@ import {
   INPUT_FIELD_CLASS,
 } from './authStyles';
 
+const CAPTCHA_WIDTH = 128;
+const CAPTCHA_HEIGHT = 52;
+
+const seededValue = (code) =>
+  code
+    .split('')
+    .reduce((acc, ch, idx) => acc + (ch.charCodeAt(0) + idx * 11), 0);
+
+const randomBetween = (min, max, value) => min + (max - min) * value;
+const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
 function CaptchaBox({ code, onRefresh, onChange, value }) {
-  const seed = code.split('').reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
-  const horizontalLines = Array.from({ length: 6 }, (_, idx) => ({
-    x1: 6,
-    y1: 6 + idx * 8,
-    x2: 122,
-    y2: 6 + idx * 8,
-  }));
-  const verticalLines = Array.from({ length: 6 }, (_, idx) => ({
-    x1: 6 + idx * 18,
-    y1: 6,
-    x2: 6 + idx * 18,
-    y2: 44,
-  }));
-  const dots = Array.from({ length: 18 }, (_, idx) => {
-    const rand = Math.abs(Math.sin((seed + idx * 13) * 0.73));
+  const seed = seededValue(code);
+  const jitter = (offset) => {
+    const result = Math.sin((seed + offset) * 0.37);
+    return (result + 1) / 2;
+  };
+
+  const horizontalLine = {
+    x1: 10,
+    x2: CAPTCHA_WIDTH - 10,
+    y1: randomBetween(CAPTCHA_HEIGHT * 0.42, CAPTCHA_HEIGHT * 0.54, jitter(2)),
+  };
+  horizontalLine.y2 = horizontalLine.y1;
+
+  const verticalLine = {
+    x1: randomBetween(CAPTCHA_WIDTH * 0.46, CAPTCHA_WIDTH * 0.58, jitter(3)),
+    y1: 8,
+    y2: CAPTCHA_HEIGHT - 8,
+  };
+  verticalLine.x2 = verticalLine.x1;
+
+  const diagonalLines = Array.from({ length: 3 }, (_, idx) => {
+    const angleDeg = randomBetween(-5, 5, jitter(10 + idx));
+    const angleRad = (angleDeg * Math.PI) / 180;
+    const length = CAPTCHA_WIDTH * 1.3;
+    const dx = Math.cos(angleRad) * length;
+    const dy = Math.sin(angleRad) * length;
+    const centerX = CAPTCHA_WIDTH / 2 + randomBetween(-10, 10, jitter(20 + idx));
+    const centerY = CAPTCHA_HEIGHT / 2 + randomBetween(-3, 3, jitter(30 + idx));
     return {
-      cx: 128 * rand,
-      cy: 52 * Math.abs(Math.cos((seed + idx * 22) * 0.19)),
-      r: 1 + rand * 1.2,
-      opacity: 0.04 + rand * 0.08,
+      x1: clamp(centerX - dx / 2, -40, CAPTCHA_WIDTH + 40),
+      y1: clamp(centerY - dy / 2, -40, CAPTCHA_HEIGHT + 40),
+      x2: clamp(centerX + dx / 2, -40, CAPTCHA_WIDTH + 40),
+      y2: clamp(centerY + dy / 2, -40, CAPTCHA_HEIGHT + 40),
     };
   });
+
+  const dots = [];
+  const clusters = 5;
+  for (let cluster = 0; cluster < clusters; cluster += 1) {
+    const clusterSeed = seed + cluster * 17;
+    const baseX = randomBetween(24, CAPTCHA_WIDTH - 24, jitter(clusterSeed));
+    const baseY = randomBetween(16, CAPTCHA_HEIGHT - 16, jitter(clusterSeed + 1));
+    const members = 3;
+    for (let member = 0; member < members; member += 1) {
+      const rr = randomBetween(0.5, 1.8, jitter(clusterSeed + 2 + member));
+      const opacity = randomBetween(0.1, 0.25, jitter(clusterSeed + 5 + member));
+      dots.push({
+        cx: clamp(baseX + randomBetween(-5, 5, jitter(clusterSeed + 8 + member)), 4, CAPTCHA_WIDTH - 4),
+        cy: clamp(baseY + randomBetween(-4, 4, jitter(clusterSeed + 11 + member)), 4, CAPTCHA_HEIGHT - 4),
+        r: rr,
+        opacity,
+      });
+    }
+  }
+  for (let extra = 0; extra < 3; extra += 1) {
+    const gapSeed = seed + 120 + extra * 9;
+    dots.push({
+      cx: randomBetween(12, CAPTCHA_WIDTH - 12, jitter(gapSeed)),
+      cy: randomBetween(10, CAPTCHA_HEIGHT - 10, jitter(gapSeed + 1)),
+      r: randomBetween(0.5, 1.8, jitter(gapSeed + 2)),
+      opacity: randomBetween(0.1, 0.25, jitter(gapSeed + 3)),
+    });
+  }
+
   const charTransforms = code.split('').map((char, idx) => {
-    const rotation = ((seed + idx * 17) % 31) - 15;
-    const x = 18 + idx * 30 + (((seed + idx * 11) % 10) - 5);
-    const y = 32 + (((seed + idx * 13) % 7) - 3);
+    const xBase = 28 + idx * 32;
+    const rotation = randomBetween(-15, 15, jitter(60 + idx));
+    const x = xBase + randomBetween(-6, 6, jitter(70 + idx)) - idx * 2;
+    const y = 32 + randomBetween(-5, 5, jitter(80 + idx));
     return { char, rotation, x, y };
   });
 
@@ -43,11 +98,10 @@ function CaptchaBox({ code, onRefresh, onChange, value }) {
       >
         <svg width="128" height="52" viewBox="0 0 128 52" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect x="0.5" y="0.5" width="127" height="51" rx="12" fill="#101010" stroke="rgba(255,255,255,0.05)" />
-          {horizontalLines.map((line, idx) => (
-            <line key={`h-${idx}`} {...line} stroke="#ffffff" strokeWidth="0.5" strokeOpacity="0.08" />
-          ))}
-          {verticalLines.map((line, idx) => (
-            <line key={`v-${idx}`} {...line} stroke="#ffffff" strokeWidth="0.5" strokeOpacity="0.08" />
+          <line {...horizontalLine} stroke="#ffffff" strokeWidth="0.5" strokeOpacity="0.06" />
+          <line {...verticalLine} stroke="#ffffff" strokeWidth="0.5" strokeOpacity="0.06" />
+          {diagonalLines.map((line, idx) => (
+            <line key={`diag-${idx}`} {...line} stroke="#ffffff" strokeWidth="0.35" strokeOpacity="0.05" />
           ))}
           {dots.map((dot, idx) => (
             <circle key={`dot-${idx}`} cx={dot.cx} cy={dot.cy} r={dot.r} fill="#ffffff" opacity={dot.opacity} />
@@ -57,11 +111,11 @@ function CaptchaBox({ code, onRefresh, onChange, value }) {
               key={`char-${idx}`}
               x={x}
               y={y}
-              fill="#ffffff"
+              fill="#030303"
               fontSize="22"
-              fontFamily="'Doto', monospace"
+              fontFamily="'Arial Black', 'Inter', sans-serif"
               transform={`rotate(${rotation} ${x} ${y})`}
-              style={{ letterSpacing: '0.2em' }}
+              style={{ letterSpacing: '-0.08em', fontWeight: 700 }}
             >
               {char}
             </text>
@@ -72,9 +126,9 @@ function CaptchaBox({ code, onRefresh, onChange, value }) {
           className="absolute bottom-1 right-1 rounded-full bg-white/10 p-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground hover:bg-white/20"
           onClick={onRefresh}
           aria-label="Refresh captcha"
-          style={{ height: '32px', width: '32px' }}
+          style={{ height: 32, width: 32 }}
         >
-          ↻
+          â†»
         </button>
       </div>
       <input
@@ -110,133 +164,137 @@ export default function AuthModal({
     : 'Sign in to your Bounty account';
   const switchLabel = isSignup ? 'Have an account?' : 'No account?';
   const switchAction = isSignup ? 'Log in' : 'Sign up';
-
   const usernameId = isSignup ? 'signup-username' : 'login-username';
   const passwordId = isSignup ? 'signup-password' : 'login-password';
   const formId = `${mode}-form`;
 
-  const showLoginError = mode === 'login';
-  const showSignupError = mode === 'signup';
-
-  if (!open) return null;
-
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center px-4"
-      role="dialog"
-      aria-modal="true"
-    >
-      <div className="absolute inset-0 bg-black/60" onClick={onClose} />
-      <div
-        className="relative w-full max-w-md rounded-2xl border border-[#1f1f1f] bg-[#0a0a0a] p-7 text-white shadow-[0_0_45px_rgba(255,255,255,0.08)]"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute right-4 top-4 text-muted-foreground hover:text-foreground transition-colors"
-          aria-label="Close"
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          key="auth-modal"
+          className="fixed inset-0 z-50 flex items-center justify-center px-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
-        </button>
-        <h2
-          className="text-3xl font-black text-center"
-          style={{ fontFamily: "'Doto', sans-serif", fontWeight: 900 }}
-        >
-          {heading}
-        </h2>
-        <p className="text-center text-sm text-muted-foreground mb-6">{subtitle}</p>
-        <p id="login-error" className={`hidden text-sm text-red-500 mb-4 text-center rounded-lg bg-red-500/10 px-3 py-2${showLoginError ? '' : ' hidden'}`} />
-        <p id="signup-error" className={`hidden text-sm text-red-500 mb-4 text-center rounded-lg bg-red-500/10 px-3 py-2${showSignupError ? '' : ' hidden'}`} />
-        <form id={formId} className="space-y-4" onSubmit={onSubmit}>
-          <div className="space-y-1">
-            <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground block">
-              Username
-            </label>
-            <input
-              id={usernameId}
-              type="text"
-              placeholder="Your username"
-              autoComplete="username"
-              className={INPUT_FIELD_CLASS}
-            />
-          </div>
-          <div className="space-y-1">
-            <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground block">
-              Password
-            </label>
-            <input
-              id={passwordId}
-              type="password"
-              placeholder="Your password"
-              autoComplete="current-password"
-              className={INPUT_FIELD_CLASS}
-            />
-          </div>
-          {isSignup && (
-            <div className="space-y-1">
-              <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground block">
-                Confirm password
-              </label>
-              <input
-                id="signup-confirm-password"
-                type="password"
-                placeholder="Repeat password"
-                autoComplete="new-password"
-                className={INPUT_FIELD_CLASS}
-              />
+          <motion.div
+            className="absolute inset-0 bg-black/60"
+            onClick={onClose}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          />
+          <motion.div
+            className="relative w-full max-w-md rounded-2xl border border-[#1f1f1f] bg-[#0a0a0a] p-7 text-white shadow-[0_0_45px_rgba(255,255,255,0.08)]"
+            initial={{ scale: 0.98, y: 20, opacity: 0 }}
+            animate={{ scale: 1, y: 0, opacity: 1 }}
+            exit={{ scale: 0.96, y: 12, opacity: 0 }}
+          >
+            <button
+              type="button"
+              onClick={onClose}
+              className="absolute right-4 top-4 text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Close"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+            <h2 className="text-3xl font-black text-center" style={{ fontFamily: "'Doto', sans-serif", fontWeight: 900 }}>
+              {heading}
+            </h2>
+            <p className="text-center text-sm text-muted-foreground mb-6">{subtitle}</p>
+            <p id="login-error" className={`hidden text-sm text-red-500 mb-4 text-center rounded-lg bg-red-500/10 px-3 py-2${isSignup ? ' hidden' : ''}`} />
+            <p id="signup-error" className={`hidden text-sm text-red-500 mb-4 text-center rounded-lg bg-red-500/10 px-3 py-2${isSignup ? '' : ' hidden'}`} />
+            <form id={formId} className="space-y-4" onSubmit={onSubmit}>
+              <div className="space-y-1">
+                <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground block">Username</label>
+                <input
+                  id={usernameId}
+                  type="text"
+                  placeholder="Your username"
+                  autoComplete="username"
+                  className={INPUT_FIELD_CLASS}
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground block">Password</label>
+                <input
+                  id={passwordId}
+                  type="password"
+                  placeholder="Your password"
+                  autoComplete={isSignup ? 'new-password' : 'current-password'}
+                  className={INPUT_FIELD_CLASS}
+                />
+              </div>
+              {isSignup && (
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground block">Confirm password</label>
+                  <input
+                    id="signup-confirm-password"
+                    type="password"
+                    placeholder="Repeat password"
+                    autoComplete="new-password"
+                    className={INPUT_FIELD_CLASS}
+                  />
+                </div>
+              )}
+              <div className="space-y-2">
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Verify you're human</p>
+                <CaptchaBox
+                  code={captchaCode}
+                  value={captchaInput}
+                  onChange={onCaptchaChange}
+                  onRefresh={refreshCaptcha}
+                />
+              </div>
+              <button
+                id={`${mode}-submit-btn`}
+                type="submit"
+                data-slot="button"
+                className={AUTH_FORM_BUTTON_CLASS}
+                style={CTA_BUTTON_STYLE}
+                disabled={!isCaptchaValid}
+              >
+                {heading === 'Log In' ? 'Login' : 'Sign Up'}
+              </button>
+            </form>
+            <div className="mt-4 text-center text-xs text-muted-foreground">
+              {switchLabel}{' '}
+              <button
+                type="button"
+                onClick={() => onSwitch(isSignup ? 'login' : 'signup')}
+                className="text-foreground underline font-medium hover:opacity-70"
+              >
+                {switchAction}
+              </button>
             </div>
-          )}
-          <div className="space-y-2">
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Verify you're human</p>
-            <CaptchaBox
-              code={captchaCode}
-              value={captchaInput}
-              onChange={onCaptchaChange}
-              onRefresh={refreshCaptcha}
-            />
-          </div>
-          <button
-            id={`${mode}-submit-btn`}
-            type="submit"
-            data-slot="button"
-            className={AUTH_FORM_BUTTON_CLASS}
-            style={CTA_BUTTON_STYLE}
-            disabled={!isCaptchaValid}
-          >
-            {heading === 'Log In' ? 'Login' : 'Sign Up'}
-          </button>
-        </form>
-        <div className="mt-4 text-center text-xs text-muted-foreground">
-          {switchLabel}{' '}
-          <button
-            type="button"
-            onClick={() => onSwitch(isSignup ? 'login' : 'signup')}
-            className="text-foreground underline font-medium hover:opacity-70"
-          >
-            {switchAction}
-          </button>
-        </div>
-        <div className="auth-divider mt-5"><div className="line" /><span>or continue with</span><div className="line" /></div>
-        <button type="button" onClick={() => window.handleGoogleOAuth?.()} className="btn-google mb-2">
-          <svg width="16" height="16" viewBox="0 0 48 48">
-            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
-            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
-            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
-            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
-          </svg>
-          Continue with Google
-        </button>
-        <button type="button" onClick={() => window.handleDiscordOAuth?.()} className="btn-discord">
-          <svg width="18" height="14" viewBox="0 0 71 55" fill="currentColor">
-            <path d="M60.1 4.9A58.5 58.5 0 0045.4.2a.2.2 0 00-.2.1 40.8 40.8 0 00-1.8 3.7 54 54 0 00-16.2 0A37.3 37.3 0 0025.4.3a.2.2 0 00-.2-.1A58.4 58.4 0 0010.5 4.9a.2.2 0 00-.1.1C1.5 18.7-.9 32.2.3 45.5v.1a58.7 58.7 0 0017.7 9 .2.2 0 00.3-.1 42 42 0 003.6-5.9.2.2 0 00-.1-.3 38.6 38.6 0 01-5.5-2.6.2.2 0 010-.4l1.1-.9a.2.2 0 01.2 0 41.9 41.9 0 0035.6 0 .2.2 0 01.2 0l1.1.9a.2.2 0 010 .3 36.3 36.3 0 01-5.5 2.7.2.2 0 00-.1.3 47.2 47.2 0 003.6 5.9.2.2 0 00.3.1A58.5 58.5 0 0070.3 45.6v-.1C71.7 30.1 67.8 16.7 60.2 5a.2.2 0 00-.1-.1zM23.7 37.3c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2c3.6 0 6.5 3.3 6.4 7.2 0 4-2.8 7.2-6.4 7.2zm23.7 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2c3.6 0 6.5 3.3 6.4 7.2 0 4-2.8 7.2-6.4 7.2z" />
-          </svg>
-          Continue with Discord
-        </button>
-      </div>
-    </div>
+            <div className="auth-divider mt-5">
+              <div className="line" />
+              <span>or continue with</span>
+              <div className="line" />
+            </div>
+            <button type="button" onClick={() => window.handleGoogleOAuth?.()} className="btn-google mb-2">
+              <svg width="16" height="16" viewBox="0 0 48 48">
+                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+              </svg>
+              Continue with Google
+            </button>
+            <button type="button" onClick={() => window.handleDiscordOAuth?.()} className="btn-discord">
+              <svg width="18" height="14" viewBox="0 0 71 55" fill="currentColor">
+                <path d="M60.1 4.9A58.5 58.5 0 0045.4.2a.2.2 0 00-.2.1 40.8 40.8 0 00-1.8 3.7 54 54 0 00-16.2 0A37.3 37.3 0 0025.4.3a.2.2 0 00-.2-.1A58.4 58.4 0 0010.5 4.9a.2.2 0 00-.1.1C1.5 18.7-.9 32.2.3 45.5v.1a58.7 58.7 0 0017.7 9 .2.2 0 00.3-.1 42 42 0 003.6-5.9.2.2 0 00-.1-.3 38.6 38.6 0 01-5.5-2.6.2.2 0 010-.4l1.1-.9a.2.2 0 01.2 0 41.9 41.9 0 0035.6 0 .2.2 0 01.2 0l1.1.9a.2.2 0 010 .3 36.3 36.3 0 01-5.5 2.7.2.2 0 00-.1.3 47.2 47.2 0 003.6 5.9.2.2 0 00.3.1A58.5 58.5 0 0070.3 45.6v-.1C71.7 30.1 67.8 16.7 60.2 5a.2.2 0 00-.1-.1zM23.7 37.3c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2c3.6 0 6.5 3.3 6.4 7.2 0 4-2.8 7.2-6.4 7.2zm23.7 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2c3.6 0 6.5 3.3 6.4 7.2 0 4-2.8 7.2-6.4 7.2z" />
+              </svg>
+              Continue with Discord
+            </button>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
+

@@ -1,6 +1,8 @@
 import Link from 'next/link';
+import { AUTH_FORM_BUTTON_CLASS } from './authStyles';
 
 export default function Navbar() {
+  const navButtonClass = `${AUTH_FORM_BUTTON_CLASS} w-auto px-4 py-1.5 text-xs font-semibold whitespace-nowrap`;
   return (
     <nav className="bg-nav border-b border-border sticky top-0 z-40">
       <div className="mx-auto flex max-w-7xl items-center gap-1 px-4 py-2.5">
@@ -61,15 +63,18 @@ export default function Navbar() {
             />
           </div>
           <div id="auth-buttons" className="flex items-center gap-2">
+            <Link href="/become-a-seller" className={navButtonClass}>
+              Become a seller
+            </Link>
             <button
               onClick={() => window.openModal?.('login')}
-              className="px-3.5 py-1.5 rounded-lg text-sm font-medium border border-border text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors"
+              className={navButtonClass}
             >
               Log in
             </button>
             <button
               onClick={() => window.openModal?.('signup')}
-              className="px-3.5 py-1.5 rounded-lg text-sm font-semibold bg-foreground text-background hover:opacity-80 transition-opacity"
+              className={navButtonClass}
             >
               Sign up
             </button>
