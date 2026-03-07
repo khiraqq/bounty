@@ -283,14 +283,16 @@ export default function AuthModal({
                 {heading === 'Log In' ? 'Login' : 'Sign Up'}
               </button>
             </form>
-            <div className="mt-4 text-center text-xs text-muted-foreground">
-              {switchLabel}{' '}
+            <div className="mt-4 text-center text-xs flex items-center justify-center gap-1">
+              <span className="text-zinc-500">
+                {isSignup ? 'Already have an account?' : "Don't have an account?"}
+              </span>
               <button
                 type="button"
                 onClick={() => onSwitch(isSignup ? 'login' : 'signup')}
-                className="text-foreground underline font-medium hover:opacity-70"
+                className="text-white font-semibold underline underline-offset-4"
               >
-                {switchAction}
+                {isSignup ? 'Login' : 'Sign up'}
               </button>
             </div>
             <div className="auth-divider mt-5">
