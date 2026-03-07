@@ -1,5 +1,6 @@
+import Head from 'next/head';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { exposeToWindow, initApp } from '../utils/auth';
 
@@ -8,14 +9,33 @@ export const AUTH_FORM_BUTTON_CLASS =
 
 export const CTA_BUTTON_STYLE = {
   backgroundImage: 'linear-gradient(to bottom, #27272a, #18181b)',
-  border: '1px solid rgba(255, 255, 255, 0.2)',
-  boxShadow: '0 4px 14px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+  border: '1px solid rgba(255, 255, 255, 0.05)',
+  borderTop: '1px solid rgba(255, 255, 255, 0.2)',
+  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
   textShadow: '0 1px 2px rgba(0, 0, 0, 0.6)',
 };
 
+const CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+
+const generateCaptcha = () => Array.from({ length: 3 }, () => CHARS[Math.floor(Math.random() * CHARS.length)]).join('');
+
+const INPUT_FIELD_CLASS =
+  "flex h-10 w-full rounded-md border border-[#1a1a1a] bg-[#0d0d0d] px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:border-foreground focus-visible:ring-1 focus-visible:ring-ring outline-none";
+
+const CAPTCHA_INPUT_CLASS =
+  `${INPUT_FIELD_CLASS} font-mono tracking-[0.25em] text-center uppercase bg-[#0d0d0d] border-[#1a1a1a]`;
+
 export default function Layout({ children }) {
   const router = useRouter();
+  const [captchaCode, setCaptchaCode] = useState(() => generateCaptcha());
+  const [captchaInput, setCaptchaInput] = useState('');
   const isSellerPage = router.pathname === '/become-a-seller';
+
+  const isCaptchaValid = captchaCode && captchaInput === captchaCode;
+  const refreshCaptcha = () => {
+    setCaptchaCode(generateCaptcha());
+    setCaptchaInput('');
+  };
 
   useEffect(() => {
     exposeToWindow();
@@ -115,6 +135,12 @@ export default function Layout({ children }) {
 
   return (
     <>
+      <Head>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Doto:wght@900&display=swap"
+        />
+      </Head>
       <div className="bg-topbar text-topbar-foreground text-xs border-b border-border">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-1.5">
           <div />
@@ -221,9 +247,21 @@ export default function Layout({ children }) {
 
       <main>{children}</main>
 
-      <div id="modal-overlay" className="hidden fixed inset-0 z-50 flex items-center justify-center" onClick={(e) => window.handleOverlayClick?.(e)}>
+      <div
+        id="modal-overlay"
+        className="hidden fixed inset-0 z-50 flex items-center justify-center"
+        onClick={(e) => window.handleOverlayClick?.(e)}
+      >
         <div id="modal-backdrop" className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-        <div className="relative z-10 w-full max-w-md mx-4 bg-card rounded-2xl p-8 shadow-2xl border border-border" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="relative z-10 w-full max-w-md mx-4 rounded-2xl p-7 pointer-events-auto overflow-y-auto max-h-[90vh]"
+          style={{
+            background: '#0a0a0a',
+            border: '1px solid #1f1f1f',
+            boxShadow: '0 0 45px rgba(255,255,255,0.08)',
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
           <button onClick={() => window.closeModal?.()} className="absolute right-4 top-4 text-muted-foreground hover:text-foreground transition-colors">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="18" y1="6" x2="6" y2="18" />
@@ -289,27 +327,74 @@ export default function Layout({ children }) {
             </p>
           </div>
           <div id="signup-modal" className="hidden mt-4">
-            <h2 className="text-2xl font-black text-center mb-1" style={{ fontFamily: "'Doto', monospace" }}>Create account</h2>
-            <p className="text-sm text-muted-foreground text-center mb-6">Join thousands of traders on Bounty</p>
+            <h2
+              className="text-3xl text-center text-white mb-1"
+              style={{ fontFamily: "'Doto', sans-serif", fontWeight: 900 }}
+            >
+              Create an account
+            </h2>
+            <p className="text-sm text-muted-foreground text-center mb-6">
+              Enter your details to create a new account
+            </p>
             <p id="signup-error" className="hidden text-sm text-red-500 mb-4 text-center rounded-lg bg-red-500/10 px-3 py-2" />
-            <form id="signup-form" className="space-y-3" onSubmit={(e) => window.handleSignupSubmit?.(e)}>
-              <div>
-                <label className="text-sm font-medium block mb-1.5">Username</label>
-                <input id="signup-username" type="text" placeholder="Your username" autoComplete="username" className="w-full h-10 px-3 rounded-lg bg-background border border-input text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring" />
+            <form id="signup-form" className="space-y-4" onSubmit={(e) => window.handleSignupSubmit?.(e)}>
+              <div className="space-y-1">
+                <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground block">
+                  Username
+                </label>
+                <input id="signup-username" type="text" placeholder="Your username" autoComplete="username" className={INPUT_FIELD_CLASS} />
               </div>
-              <div>
-                <label className="text-sm font-medium block mb-1.5">Password</label>
-                <input id="signup-password" type="password" placeholder="Min 8 characters" autoComplete="new-password" className="w-full h-10 px-3 rounded-lg bg-background border border-input text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring" />
+              <div className="space-y-1">
+                <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground block">
+                  Password
+                </label>
+                <input id="signup-password" type="password" placeholder="Min 8 characters" autoComplete="new-password" className={INPUT_FIELD_CLASS} />
               </div>
-              <div>
-                <label className="text-sm font-medium block mb-1.5">Confirm Password</label>
-                <input id="signup-confirm-password" type="password" placeholder="Repeat password" autoComplete="new-password" className="w-full h-10 px-3 rounded-lg bg-background border border-input text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring" />
+              <div className="space-y-1">
+                <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground block">
+                  Confirm password
+                </label>
+                <input id="signup-confirm-password" type="password" placeholder="Repeat password" autoComplete="new-password" className={INPUT_FIELD_CLASS} />
+              </div>
+              <div className="space-y-2">
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Verify you're human</p>
+                <div className="flex gap-3">
+                  <div
+                    className="relative flex h-24 w-32 items-center justify-center rounded-xl border border-white/10 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.15),_rgba(255,255,255,0))]"
+                    style={{ backgroundSize: '120% 120%', backgroundPosition: 'center', backgroundColor: '#1f1f1f' }}
+                  >
+                    <span
+                      className="text-3xl tracking-[0.2em] text-white"
+                      style={{ fontFamily: "'Doto', sans-serif", transform: 'skew(-6deg)' }}
+                    >
+                      {captchaCode}
+                    </span>
+                    <button
+                      type="button"
+                      className="absolute bottom-2 right-2 rounded-full bg-white/10 p-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground hover:bg-white/20"
+                      onClick={refreshCaptcha}
+                      aria-label="Refresh captcha"
+                    >
+                      ↻
+                    </button>
+                  </div>
+                  <input
+                    id="signup-captcha"
+                    type="text"
+                    placeholder="ENTER CODE"
+                    value={captchaInput}
+                    onChange={(e) => setCaptchaInput(e.target.value)}
+                    className={CAPTCHA_INPUT_CLASS}
+                  />
+                </div>
               </div>
               <button
                 id="signup-submit-btn"
                 type="submit"
                 data-slot="button"
                 className={AUTH_FORM_BUTTON_CLASS}
+                style={CTA_BUTTON_STYLE}
+                disabled={!isCaptchaValid}
               >
                 Sign Up
               </button>
