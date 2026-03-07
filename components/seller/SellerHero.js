@@ -2,8 +2,8 @@
 // Place at: components/seller/SellerHero.js
 
 import { useState } from 'react';
-import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
+import { AUTH_FORM_BUTTON_CLASS } from '../authStyles';
 
 const STATS = [
   { label: 'Safe sales', sub: 'Protected by TradeShield' },
@@ -69,13 +69,13 @@ function MascotIllustration() {
 }
 
 export default function SellerHero() {
-  const router = useRouter();
   const [clicking, setClicking] = useState(false);
 
-  const handleClick = async () => {
+  const handleClick = () => {
+    if (clicking) return;
     setClicking(true);
-    await new Promise(r => setTimeout(r, 600));
-    router.push('/seller/onboarding');
+    window.handleStartSelling?.();
+    setTimeout(() => setClicking(false), 800);
   };
 
   return (
@@ -120,13 +120,8 @@ export default function SellerHero() {
             <button
               onClick={handleClick}
               disabled={clicking}
-              className="inline-flex items-center justify-center gap-2.5 rounded-xl font-bold text-base transition-all duration-200 disabled:opacity-70"
-              style={{
-                padding: '0.875rem 1.75rem',
-                background: 'hsl(var(--foreground))',
-                color: 'hsl(var(--background))',
-                minWidth: 160,
-              }}
+              className={`${AUTH_FORM_BUTTON_CLASS} disabled:opacity-70`}
+              style={{ minWidth: 160 }}
             >
               <span>{clicking ? 'Loading…' : 'Start Selling'}</span>
               {clicking ? (

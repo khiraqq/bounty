@@ -26,64 +26,6 @@ function CaptchaBox({ code, onRefresh, onChange, value }) {
     return (result + 1) / 2;
   };
 
-  const horizontalLine = {
-    x1: 10,
-    x2: CAPTCHA_WIDTH - 10,
-    y1: randomBetween(CAPTCHA_HEIGHT * 0.42, CAPTCHA_HEIGHT * 0.54, jitter(2)),
-  };
-  horizontalLine.y2 = horizontalLine.y1;
-
-  const verticalLine = {
-    x1: randomBetween(CAPTCHA_WIDTH * 0.46, CAPTCHA_WIDTH * 0.58, jitter(3)),
-    y1: 8,
-    y2: CAPTCHA_HEIGHT - 8,
-  };
-  verticalLine.x2 = verticalLine.x1;
-
-  const diagonalLines = Array.from({ length: 3 }, (_, idx) => {
-    const angleDeg = randomBetween(-5, 5, jitter(10 + idx));
-    const angleRad = (angleDeg * Math.PI) / 180;
-    const length = CAPTCHA_WIDTH * 1.3;
-    const dx = Math.cos(angleRad) * length;
-    const dy = Math.sin(angleRad) * length;
-    const centerX = CAPTCHA_WIDTH / 2 + randomBetween(-10, 10, jitter(20 + idx));
-    const centerY = CAPTCHA_HEIGHT / 2 + randomBetween(-3, 3, jitter(30 + idx));
-    return {
-      x1: clamp(centerX - dx / 2, -40, CAPTCHA_WIDTH + 40),
-      y1: clamp(centerY - dy / 2, -40, CAPTCHA_HEIGHT + 40),
-      x2: clamp(centerX + dx / 2, -40, CAPTCHA_WIDTH + 40),
-      y2: clamp(centerY + dy / 2, -40, CAPTCHA_HEIGHT + 40),
-    };
-  });
-
-  const dots = [];
-  const clusters = 5;
-  for (let cluster = 0; cluster < clusters; cluster += 1) {
-    const clusterSeed = seed + cluster * 17;
-    const baseX = randomBetween(24, CAPTCHA_WIDTH - 24, jitter(clusterSeed));
-    const baseY = randomBetween(16, CAPTCHA_HEIGHT - 16, jitter(clusterSeed + 1));
-    const members = 3;
-    for (let member = 0; member < members; member += 1) {
-      const rr = randomBetween(0.5, 1.8, jitter(clusterSeed + 2 + member));
-      const opacity = randomBetween(0.1, 0.25, jitter(clusterSeed + 5 + member));
-      dots.push({
-        cx: clamp(baseX + randomBetween(-5, 5, jitter(clusterSeed + 8 + member)), 4, CAPTCHA_WIDTH - 4),
-        cy: clamp(baseY + randomBetween(-4, 4, jitter(clusterSeed + 11 + member)), 4, CAPTCHA_HEIGHT - 4),
-        r: rr,
-        opacity,
-      });
-    }
-  }
-  for (let extra = 0; extra < 3; extra += 1) {
-    const gapSeed = seed + 120 + extra * 9;
-    dots.push({
-      cx: randomBetween(12, CAPTCHA_WIDTH - 12, jitter(gapSeed)),
-      cy: randomBetween(10, CAPTCHA_HEIGHT - 10, jitter(gapSeed + 1)),
-      r: randomBetween(0.5, 1.8, jitter(gapSeed + 2)),
-      opacity: randomBetween(0.1, 0.25, jitter(gapSeed + 3)),
-    });
-  }
-
   const charTransforms = code.split('').map((char, idx) => {
     const xBase = 28 + idx * 32;
     const rotation = randomBetween(-15, 15, jitter(60 + idx));
@@ -102,31 +44,25 @@ function CaptchaBox({ code, onRefresh, onChange, value }) {
         title="Click to refresh captcha"
       >
         <svg width={CAPTCHA_WIDTH} height={CAPTCHA_HEIGHT} viewBox={`0 0 ${CAPTCHA_WIDTH} ${CAPTCHA_HEIGHT}`} fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="captcha-bg" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#1d1f24" />
-              <stop offset="100%" stopColor="#131418" />
-            </linearGradient>
-          </defs>
-          <rect x="0.5" y="0.5" width={CAPTCHA_WIDTH - 1} height={CAPTCHA_HEIGHT - 1} rx="10" fill="url(#captcha-bg)" stroke="rgba(255,255,255,0.05)" />
-          <line {...horizontalLine} stroke="#ffffff" strokeWidth="0.5" strokeOpacity="0.06" />
-          <line {...verticalLine} stroke="#ffffff" strokeWidth="0.5" strokeOpacity="0.06" />
-          {diagonalLines.map((line, idx) => (
-            <line key={`diag-${idx}`} {...line} stroke="#ffffff" strokeWidth="0.35" strokeOpacity="0.05" />
-          ))}
-          {dots.map((dot, idx) => (
-            <circle key={`dot-${idx}`} cx={dot.cx} cy={dot.cy} r={dot.r} fill="#ffffff" opacity={dot.opacity} />
-          ))}
+          <rect
+            x="0.5"
+            y="0.5"
+            width={CAPTCHA_WIDTH - 1}
+            height={CAPTCHA_HEIGHT - 1}
+            rx="10"
+            fill="#101010"
+            stroke="rgba(255,255,255,0.08)"
+          />
           {charTransforms.map(({ char, rotation, x, y }, idx) => (
             <text
               key={`char-${idx}`}
               x={x}
               y={y}
-              fill="#030303"
-              fontSize="22"
-              fontFamily="'Arial Black', 'Inter', sans-serif"
+              fill="#f5f5f5"
+              fontSize="24"
+              fontFamily="'Doto', 'Inter', sans-serif"
               transform={`rotate(${rotation} ${x} ${y})`}
-              style={{ letterSpacing: '-0.08em', fontWeight: 700 }}
+              style={{ letterSpacing: '-0.05em', fontWeight: 700 }}
             >
               {char}
             </text>
@@ -171,7 +107,6 @@ export default function AuthModal({
   open,
   mode,
   onClose,
-  onSubmit,
   onSwitch,
   captchaCode,
   captchaInput,
@@ -230,7 +165,7 @@ export default function AuthModal({
             <p className="text-center text-sm text-muted-foreground mb-6">{subtitle}</p>
             <p id="login-error" className={`hidden text-sm text-red-500 mb-4 text-center rounded-lg bg-red-500/10 px-3 py-2${isSignup ? ' hidden' : ''}`} />
             <p id="signup-error" className={`hidden text-sm text-red-500 mb-4 text-center rounded-lg bg-red-500/10 px-3 py-2${isSignup ? '' : ' hidden'}`} />
-            <form id={formId} className="space-y-4" onSubmit={onSubmit}>
+            <form id={formId} className="space-y-4">
               <div className="space-y-1">
                 <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground block">Username</label>
                 <input

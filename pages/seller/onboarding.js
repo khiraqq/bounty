@@ -2,7 +2,7 @@
 // Place at: pages/seller/onboarding.js
 // 4-step seller onboarding state machine with framer-motion transitions
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -420,17 +420,32 @@ function StepDetails({ data, setData, onNext, onBack }) {
 
         <div>
           <label className="block text-sm font-semibold mb-1.5" style={{ color: 'hsl(var(--foreground))' }}>
-            Discord Username
+            Desired Seller Username
           </label>
           <input
             type="text"
-            placeholder="yourname#0000 or yourname"
-            value={data.discord || ''}
-            onChange={e => set('discord', e.target.value)}
+            placeholder="Pick your public seller name"
+            value={data.sellerUsername || ''}
+            onChange={e => set('sellerUsername', e.target.value)}
             className={INPUT_CLASS}
-            style={INPUT_STYLE}
+            style={{
+              ...INPUT_STYLE,
+              opacity: data.keepCurrentUsername ? 0.4 : 1,
+            }}
+            disabled={data.keepCurrentUsername}
           />
-          <p className="text-xs mt-1" style={{ color: 'hsl(var(--muted-foreground))' }}>Used for verification and support</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <input
+            id="keep-current-username"
+            type="checkbox"
+            checked={!!data.keepCurrentUsername}
+            onChange={e => set('keepCurrentUsername', e.target.checked)}
+            className="h-4 w-4 rounded border border-input bg-transparent text-foreground focus:ring-1 focus:ring-ring"
+          />
+          <label htmlFor="keep-current-username" className="text-sm text-muted-foreground">
+            Keep current username
+          </label>
         </div>
       </div>
 
@@ -446,7 +461,7 @@ function StepDetails({ data, setData, onNext, onBack }) {
         </button>
         <button
           onClick={onNext}
-          disabled={!data.discord || !data.deliverySpeed}
+          disabled={(!data.sellerUsername && !data.keepCurrentUsername) || !data.deliverySpeed}
           className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-opacity disabled:opacity-40 hover:opacity-80"
           style={{ background: 'hsl(var(--foreground))', color: 'hsl(var(--background))' }}
         >
@@ -518,6 +533,12 @@ function ProgressBar({ step }) {
 export default function SellerOnboarding() {
   const router = useRouter();
   const [step, setStep] = useState(1);
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (!localStorage.getItem('bounty_token')) {
+      router.replace('/');
+    }
+  }, [router]);
   const [dir, setDir] = useState(1);
   const [formData, setFormData] = useState({
     categories: [],
@@ -526,7 +547,8 @@ export default function SellerOnboarding() {
     reputation: '',
     sourcing: '',
     deliverySpeed: '',
-    discord: '',
+    sellerUsername: '',
+    keepCurrentUsername: false,
   });
 
   const go = (target) => {

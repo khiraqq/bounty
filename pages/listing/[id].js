@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { exposeToWindow, initApp } from '../../utils/auth';
+import { AUTH_FORM_BUTTON_CLASS } from '../../components/authStyles';
 
 const DOTO = { fontFamily: "'Doto', sans-serif" };
 const timeAgo = (value) => {
@@ -57,8 +58,10 @@ export default function ListingPage() {
   }, [listing]);
 
   const handleBuy = async () => {
-    const tok = typeof window !== 'undefined' ? localStorage.getItem('bounty_token') : null;
-    if (!tok) { window.openModal?.('login'); return; }
+    if (typeof window === 'undefined') return;
+    if (!window.ensureAuthenticated?.()) return;
+    const tok = localStorage.getItem('bounty_token');
+    if (!tok) return;
     setOrderLoading(true);
     setOrderMsg('');
     try {
@@ -226,12 +229,20 @@ export default function ListingPage() {
               <button
                 onClick={handleBuy}
                 disabled={orderLoading}
-                className="w-full rounded-2xl text-sm font-semibold uppercase tracking-widest transition-all"
+                className={`${AUTH_FORM_BUTTON_CLASS} text-sm font-semibold uppercase tracking-widest`}
                 style={{ background: 'linear-gradient(180deg, #fbc02d, #f59e0b)', color: '#111', height: '3rem' }}
               >
                 {orderLoading ? 'Placing Orderâ€¦' : 'Buy Now'}
               </button>
-              <button onClick={() => { const tok = localStorage.getItem('bounty_token'); if (!tok) { window.openModal?.('login'); return; } window.location.href = '/messages?to=' + listing.sellerUsername; }} className="btn-outline w-full" style={{ height: '2.5rem' }}>
+              <button
+                onClick={() => {
+                  if (typeof window === 'undefined') return;
+                  if (!window.ensureAuthenticated?.()) return;
+                  window.location.href = '/messages?to=' + listing.sellerUsername;
+                }}
+                className={`${AUTH_FORM_BUTTON_CLASS} border border-border bg-transparent text-foreground hover:bg-secondary`}
+                style={{ height: '2.5rem' }}
+              >
                 Contact Seller
               </button>
 
