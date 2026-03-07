@@ -4,6 +4,23 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { exposeToWindow, initApp } from '../../utils/auth';
 
+const DOTO = { fontFamily: "'Doto', sans-serif" };
+const timeAgo = (value) => {
+  if (!value) return '';
+  const diff = Date.now() - new Date(value).getTime();
+  const minutes = Math.floor(diff / 60000);
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
+};
+const maskName = (username) => {
+  if (!username) return 'Buyer***';
+  const prefix = username.slice(0, 3);
+  return `${prefix}${prefix.length < 3 ? '*'.repeat(3 - prefix.length) : ''}***`;
+};
+
 export default function ListingPage() {
   const router = useRouter();
   const { id } = router.query;
@@ -13,6 +30,7 @@ export default function ListingPage() {
   const [quantity, setQuantity] = useState(1000);
   const [orderLoading, setOrderLoading] = useState(false);
   const [orderMsg, setOrderMsg] = useState('');
+  const [similarListings, setSimilarListings] = useState([]);
 
   useEffect(() => {
     exposeToWindow();
@@ -26,6 +44,17 @@ export default function ListingPage() {
       fetch('/api/reviews?listingId=' + id).then(r => r.json()).then(d => setReviews(d.reviews || [])).catch(() => {});
     }
   }, [id]);
+
+  useEffect(() => {
+    if (!listing?.category) return;
+    fetch('/api/listings?category=' + encodeURIComponent(listing.category) + '&limit=5')
+      .then(r => r.json())
+      .then(d => {
+        const others = (d.listings || []).filter(item => item._id !== listing._id).slice(0, 4);
+        setSimilarListings(others);
+      })
+      .catch(() => {});
+  }, [listing]);
 
   const handleBuy = async () => {
     const tok = typeof window !== 'undefined' ? localStorage.getItem('bounty_token') : null;
@@ -67,6 +96,12 @@ export default function ListingPage() {
     </PageShell>
   );
 
+  const heroImageUrl = listing.heroImage || listing.image || listing.coverImage;
+  const heroImageStyle = heroImageUrl
+    ? { backgroundImage: `url(${heroImageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+    : { background: 'linear-gradient(180deg, rgba(15,23,42,0.9), rgba(2,6,23,0.95))' };
+  const recentFeedback = reviews.slice(0, 3);
+
   return (
     <PageShell title={listing.title + ' â€” Bounty'}>
       <div className="mx-auto max-w-7xl px-4 py-8">
@@ -82,85 +117,82 @@ export default function ListingPage() {
           {/* Main column */}
           <div className="lg:col-span-2 space-y-6">
             {/* Listing header */}
-            <div className="bg-card border border-border rounded-xl p-6">
-              <div className="flex items-start gap-4">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-2 flex-wrap">
-                    {listing.game && <span className="text-xs px-2 py-0.5 rounded-full font-semibold" style={{ background: 'rgba(107,114,128,0.12)', color: '#d1d5db' }}>{listing.game}</span>}
-                    {listing.category && <span className="text-xs px-2 py-0.5 rounded-full font-semibold border border-border">{listing.category}</span>}
-                    {listing.isFeatured && <span className="text-xs px-2 py-0.5 rounded-full font-bold" style={{ background: '#f59e0b', color: 'white' }}>â­ Featured</span>}
-                  </div>
-                  <h1 className="text-2xl font-black mb-3">{listing.title}</h1>
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground flex-wrap">
-                    <span>âš¡ Delivery: <strong className="text-foreground">{listing.deliveryTime || '1-24 hours'}</strong></span>
-                    <span>âœ“ Completion: <strong className="text-foreground">{listing.completionRate || 100}%</strong></span>
-                    {listing.stock && <span>ðŸ“¦ Stock: <strong className="text-foreground">{listing.stock.toLocaleString()}</strong></span>}
+            <div className="bg-card border border-border rounded-[32px] p-8 space-y-5">
+              <div className="flex gap-2 flex-wrap">
+                {listing.category && (
+                  <span className="text-xs px-3 py-1 rounded-full border border-border text-muted-foreground">
+                    {listing.category}
+                  </span>
+                )}
+                {listing.game && (
+                  <span className="text-xs px-3 py-1 rounded-full bg-slate-800 text-white/70 uppercase tracking-[0.2em]">
+                    {listing.game}
+                  </span>
+                )}
+                <span className="text-xs px-3 py-1 rounded-full border border-amber-400 text-amber-300">
+                  Instant Delivery
+                </span>
+              </div>
+              <h1 className="text-4xl font-black leading-tight" style={DOTO}>{listing.title}</h1>
+              <div className="relative w-full h-64 rounded-2xl overflow-hidden border border-border" style={heroImageStyle}>
+                <div className="absolute inset-0 bg-black/40" />
+                <div className="relative z-10 h-full flex flex-col justify-between p-4 text-white">
+                  <span className="text-xs uppercase tracking-[0.5em] text-white/70">Hero Image</span>
+                  <div className="flex items-center gap-3 text-sm">
+                    <span>⚡</span>
+                    <span>{listing.deliveryTime || '1-24 hours'}</span>
+                    <span>•</span>
+                    <span>Completion: <strong className="text-white">{listing.completionRate || 100}%</strong></span>
                   </div>
                 </div>
               </div>
-              {listing.description && (
-                <div className="mt-4 pt-4 border-t border-border">
-                  <h3 className="font-bold text-sm mb-2">Description</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{listing.description}</p>
-                </div>
-              )}
-            </div>
-
-            {/* Seller info */}
-            <div className="bg-card border border-border rounded-xl p-6">
-              <h3 className="font-bold mb-4">About the Seller</h3>
-              <div className="flex items-start gap-4">
-                <div className="seller-avatar h-14 w-14 flex-shrink-0">
-                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1 flex-wrap">
-                    <span className="font-bold text-lg">{listing.sellerUsername}</span>
-                    {listing.isSellerVerified && <span className="verified-badge text-xs"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg> Verified</span>}
-                    <span className={listing.isSellerOnline ? 'online-badge' : 'offline-badge'}>{listing.isSellerOnline ? 'â— Online' : 'â—‹ Offline'}</span>
-                  </div>
-                  <div className="flex items-center gap-4 text-sm flex-wrap">
-                    <span style={{ color: '#f59e0b' }}>{'â˜…'.repeat(stars)}{'â˜†'.repeat(5 - stars)}</span>
-                    <span className="text-muted-foreground">{listing.sellerRating?.toFixed(1) || '5.0'} ({listing.sellerReviews || 0} reviews)</span>
-                    <span className="text-muted-foreground">{listing.sellerOrders || 0} orders completed</span>
-                  </div>
-                  <div className="flex gap-2 mt-3">
-                    <Link href={'/seller/' + listing.sellerUsername} className="btn-outline text-sm px-4 py-1.5 h-auto inline-flex">View Profile</Link>
-                    <button onClick={() => { const tok = localStorage.getItem('bounty_token'); if (!tok) { window.openModal?.('login'); return; } window.location.href = '/messages?to=' + listing.sellerUsername; }} className="btn-outline text-sm px-4 py-1.5 h-auto inline-flex">Message</button>
-                  </div>
-                </div>
+              <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                {listing.stock && (
+                  <span>Stock: <strong className="text-foreground">{listing.stock.toLocaleString()}</strong></span>
+                )}
+                <span>Seller Rating: <strong className="text-foreground">{listing.sellerRating?.toFixed(1) || '5.0'}</strong></span>
               </div>
             </div>
 
-            {/* Reviews */}
-            <div className="bg-card border border-border rounded-xl p-6">
-              <h3 className="font-bold mb-4">Reviews ({reviews.length})</h3>
-              {reviews.length === 0 ? (
-                <p className="text-sm text-muted-foreground">No reviews yet.</p>
-              ) : (
-                <div className="space-y-4">
-                  {reviews.map(r => (
-                    <div key={r._id} className="border-b border-border pb-4 last:border-0 last:pb-0">
-                      <div className="flex items-center justify-between mb-1">
-                        <div className="flex items-center gap-2">
-                          <span className="font-semibold text-sm">{r.reviewerUsername}</span>
-                          <span style={{ color: '#f59e0b', fontSize: '0.8rem' }}>{'â˜…'.repeat(r.rating)}{'â˜†'.repeat(5 - r.rating)}</span>
-                        </div>
-                        <span className="text-xs text-muted-foreground">{new Date(r.createdAt).toLocaleDateString()}</span>
-                      </div>
-                      {r.comment && <p className="text-sm text-muted-foreground">{r.comment}</p>}
-                    </div>
+            <div className="bg-card border border-border rounded-3xl p-8 space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold" style={DOTO}>Offer Description</h3>
+                <span className="text-xs uppercase tracking-widest text-muted-foreground">{listing.priceUnit || 'per unit'}</span>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
+                {listing.description || 'Robust offer details will appear here once the seller adds them.'}
+              </p>
+            </div>
+            {similarListings.length > 0 && (
+              <div className="bg-card border border-border rounded-3xl p-6 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold" style={DOTO}>More Like This</h3>
+                  <Link href="/browse" className="text-xs uppercase tracking-widest text-foreground hover:underline">Explore similar offers</Link>
+                </div>
+                <div className="flex gap-4 overflow-x-auto pb-1">
+                  {similarListings.map(s => (
+                    <Link
+                      key={s._id}
+                      href={'/listing/' + s._id}
+                      className="min-w-[180px] flex-shrink-0 bg-secondary/20 border border-border rounded-2xl p-4 space-y-2 transition hover:border-foreground"
+                    >
+                      <p className="text-sm font-semibold truncate">{s.title}</p>
+                      <p className="text-xs text-muted-foreground">{s.category}</p>
+                      <p className="text-lg font-black" style={{ color: '#f59e0b' }}>${s.price?.toFixed(2) || '0.00'}</p>
+                    </Link>
                   ))}
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
 
           {/* Buy box */}
-          <div className="lg:col-span-1">
-            <div className="bg-card border border-border rounded-xl p-6 sticky top-4">
-              <div className="text-3xl font-black mb-1" style={{ color: 'var(--brand)' }}>${listing.price.toFixed(2)}</div>
-              <p className="text-sm text-muted-foreground mb-4">{listing.priceUnit || 'per unit'}</p>
+          <div className="lg:col-span-1 space-y-6">
+            <div className="bg-card border border-border rounded-[32px] p-6 space-y-5 sticky top-6">
+              <div className="text-4xl font-black" style={{ color: '#fbbf24' }}>
+                ${listing.price.toFixed(2)}
+              </div>
+              <p className="text-sm text-muted-foreground mb-0">{listing.priceUnit || 'per unit'}</p>
 
               <div className="mb-4">
                 <label className="text-sm font-semibold block mb-2">Quantity</label>
@@ -191,17 +223,66 @@ export default function ListingPage() {
                 </div>
               )}
 
-              <button onClick={handleBuy} disabled={orderLoading} className="btn-primary w-full mb-2" style={{ height: '2.75rem' }}>
-                {orderLoading ? 'Placing Orderâ€¦' : 'Buy Now â€” $' + total}
+              <button
+                onClick={handleBuy}
+                disabled={orderLoading}
+                className="w-full rounded-2xl text-sm font-semibold uppercase tracking-widest transition-all"
+                style={{ background: 'linear-gradient(180deg, #fbc02d, #f59e0b)', color: '#111', height: '3rem' }}
+              >
+                {orderLoading ? 'Placing Orderâ€¦' : 'Buy Now'}
               </button>
               <button onClick={() => { const tok = localStorage.getItem('bounty_token'); if (!tok) { window.openModal?.('login'); return; } window.location.href = '/messages?to=' + listing.sellerUsername; }} className="btn-outline w-full" style={{ height: '2.5rem' }}>
                 Contact Seller
               </button>
 
-              <div className="mt-4 space-y-2 text-xs text-muted-foreground">
-                <div className="flex items-center gap-2"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Secure escrow protection</div>
-                <div className="flex items-center gap-2"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg> 24/7 dispute support</div>
-                <div className="flex items-center gap-2"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Verified seller</div>
+            </div>
+            <div className="bg-card border border-border rounded-3xl p-5 space-y-2">
+              <h3 className="text-lg font-semibold" style={DOTO}>Trust Signals</h3>
+              <div className="space-y-2 text-sm text-muted-foreground">
+                <div className="flex items-center gap-3">
+                  <span className="px-3 py-1 rounded-full bg-white/10 text-white text-xs">Money-back Guarantee</span>
+                  <span>TradeShield protects every order.</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="px-3 py-1 rounded-full bg-white/10 text-white text-xs">24/7 Live Support</span>
+                  <span>Chat with us anytime.</span>
+                </div>
+              </div>
+            </div>
+            <div className="bg-card border border-border rounded-3xl p-5 space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="seller-avatar h-12 w-12 flex-shrink-0">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <div>
+                  <p className="text-lg font-black">{listing.sellerUsername || 'Incubater'}</p>
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    {listing.isSellerVerified && <span className="text-emerald-400 flex items-center gap-1">✓ Verified</span>}
+                    <span>{stars}.0 rating</span>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <p className="text-xs uppercase tracking-widest text-muted-foreground mb-2">Recent Feedback</p>
+                {recentFeedback.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">No reviews yet.</p>
+                ) : (
+                  <div className="space-y-3">
+                    {recentFeedback.map((feedback) => (
+                      <div key={feedback._id} className="rounded-2xl border border-border p-3 text-sm text-muted-foreground">
+                        <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
+                          <span className="font-semibold text-foreground">{maskName(feedback.reviewerUsername)}</span>
+                          <span>{timeAgo(feedback.createdAt)}</span>
+                        </div>
+                        <div className="flex items-center gap-1 text-amber-400">
+                          <span>{'★'.repeat(feedback.rating)}</span>
+                          <span className="text-foreground/40">{'★'.repeat(5 - feedback.rating)}</span>
+                        </div>
+                        {feedback.comment && <p className="mt-2 text-xs">{feedback.comment}</p>}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>

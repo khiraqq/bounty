@@ -4,7 +4,50 @@ import Link from 'next/link';
 import { exposeToWindow, initApp } from '../utils/auth';
 
 const GAMES = ['World of Warcraft','Old School RuneScape','Path of Exile','Final Fantasy XIV','Diablo IV','Lost Ark','Fortnite','Valorant','Rocket League','FIFA','NBA 2K','Apex Legends','CS2','Genshin Impact','League of Legends'];
-const CATS = ['Currency','Accounts','Power Leveling','Items','Boosting','Top Ups','Gift Cards'];
+const CATS = ['Roblox','Accounts','Currency','Items','Top Ups','Boosting','Giftcards'];
+const ACCOUNT_SUBCATS = ['Roblox','Fortnite','Valorant','League of Legends'];
+const DOTO = { fontFamily: "'Doto', sans-serif" };
+
+function ListingPreview({ form }) {
+  const price = Number(form.price) ? Number(form.price).toFixed(2) : '0.00';
+  const lines = (form.description || '').split('\\n').filter(Boolean).slice(0, 3);
+  const badgeLabel = form.category === 'Accounts' && form.accountSubcategory
+    ? `${form.category} · ${form.accountSubcategory}`
+    : form.category;
+
+  return (
+    <div className="border border-border rounded-2xl bg-card/80 p-5 space-y-4 text-sm">
+      <div className="text-sm uppercase tracking-widest text-muted-foreground">{badgeLabel}</div>
+      <h3 className="text-2xl font-black leading-tight" style={DOTO}>
+        {form.title || 'Listing title preview'}
+      </h3>
+      <div className="w-full h-48 rounded-2xl overflow-hidden bg-gradient-to-b from-slate-800 to-slate-900 border border-border relative">
+        <div className="absolute inset-0 bg-[radial-gradient(circle at top,rgba(249,169,38,0.25),transparent 60%)]" />
+        <div className="relative z-10 h-full flex items-center justify-center text-xs uppercase tracking-[0.3em] text-white/60">
+          Hero Image
+        </div>
+      </div>
+      <div className="space-y-2">
+        <p className="text-xs uppercase tracking-widest text-muted-foreground">Offer Description</p>
+        {lines.length > 0 ? (
+          <ul className="list-disc list-inside space-y-1 text-muted-foreground">
+            {lines.map((line, index) => <li key={index}>{line}</li>)}
+          </ul>
+        ) : (
+          <p className="text-muted-foreground">Describe the magic of your listing here.</p>
+        )}
+      </div>
+      <div className="flex items-center justify-between text-2xl font-black">
+        <span style={{ color: '#f59e0b' }}>${price}</span>
+        <span className="text-xs text-muted-foreground">Instant Delivery</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <span className="px-3 py-1 rounded-full bg-white/10 text-xs">Warranty</span>
+        <span className="px-3 py-1 rounded-full bg-white/10 text-xs">24/7 Support</span>
+      </div>
+    </div>
+  );
+}
 
 export default function Dashboard() {
   const [tab, setTab] = useState('listings');
@@ -12,7 +55,8 @@ export default function Dashboard() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
-  const [form, setForm] = useState({ game: 'World of Warcraft', category: 'Currency', title: '', description: '', price: '', priceUnit: 'per 1000 gold', minOrder: '100', maxOrder: '10000000', deliveryTime: '1-24 hours', stock: '99999' });
+  const [previewMode, setPreviewMode] = useState(true);
+  const [form, setForm] = useState({ game: 'World of Warcraft', category: 'Roblox', accountSubcategory: 'Roblox', title: '', description: '', price: '', priceUnit: 'per 1000 gold', minOrder: '100', maxOrder: '10000000', deliveryTime: '1-24 hours', stock: '99999' });
   const [createMsg, setCreateMsg] = useState('');
   const [creating, setCreating] = useState(false);
 
@@ -158,10 +202,30 @@ export default function Dashboard() {
               </div>
               <div>
                 <label className="text-sm font-medium block mb-1">Category *</label>
-                <select value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))} className="seller-form-input">
+                <select
+                  value={form.category}
+                  onChange={e => setForm(f => ({
+                    ...f,
+                    category: e.target.value,
+                    accountSubcategory: e.target.value === 'Accounts' ? (f.accountSubcategory || ACCOUNT_SUBCATS[0]) : '',
+                  }))}
+                  className="seller-form-input"
+                >
                   {CATS.map(c => <option key={c}>{c}</option>)}
                 </select>
               </div>
+              {form.category === 'Accounts' && (
+                <div>
+                  <label className="text-sm font-medium block mb-1">Account Focus</label>
+                  <select
+                    value={form.accountSubcategory}
+                    onChange={e => setForm(f => ({ ...f, accountSubcategory: e.target.value }))}
+                    className="seller-form-input"
+                  >
+                    {ACCOUNT_SUBCATS.map(ac => <option key={ac}>{ac}</option>)}
+                  </select>
+                </div>
+              )}
               <div>
                 <label className="text-sm font-medium block mb-1">Price ($) *</label>
                 <input type="number" step="0.01" min="0.01" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} placeholder="e.g. 2.50" className="seller-form-input" required />
@@ -184,6 +248,21 @@ export default function Dashboard() {
                 <label className="text-sm font-medium block mb-1">Description</label>
                 <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} placeholder="Describe your listing, delivery method, requirements..." className="seller-form-textarea" rows={3} />
               </div>
+              <div className="md:col-span-2 flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">Preview Mode</span>
+                <button
+                  type="button"
+                  onClick={() => setPreviewMode(p => !p)}
+                  className={'text-sm font-semibold transition-colors ' + (previewMode ? 'text-foreground' : 'text-muted-foreground')}
+                >
+                  {previewMode ? 'Live' : 'Paused'}
+                </button>
+              </div>
+              {previewMode && (
+                <div className="md:col-span-2">
+                  <ListingPreview form={form} />
+                </div>
+              )}
               <div className="md:col-span-2 flex gap-3">
                 <button type="submit" disabled={creating} className="btn-primary px-6">{creating ? 'Creatingâ€¦' : 'Create Listing'}</button>
                 <button type="button" onClick={() => setShowCreate(false)} className="btn-outline px-6">Cancel</button>
