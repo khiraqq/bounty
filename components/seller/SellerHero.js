@@ -1,14 +1,21 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { AUTH_FORM_BUTTON_CLASS, CTA_BUTTON_STYLE } from "../Layout";
+﻿import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { AUTH_FORM_BUTTON_CLASS } from '../authStyles';
+
+const START_BUTTON_CLASS = `${AUTH_FORM_BUTTON_CLASS} gap-2 px-7 py-3.5 text-base font-semibold rounded-2xl w-auto`;
+const START_BUTTON_STYLE = {
+  background: '#E8A020',
+  color: '#111',
+  boxShadow: '0 10px 30px rgba(232, 160, 32, 0.45)',
+  border: '1px solid rgba(232, 160, 32, 0.4)',
+  borderTop: '1px solid rgba(255, 255, 255, 0.3)',
+};
 
 const STATS = [
-  { label: "Secure escrow", sub: "Every trade protected" },
-  { label: "Global reach", sub: "Millions of buyers worldwide" },
-  { label: "Fast payouts", sub: "Withdraw anytime" },
+  { label: 'Secure escrow', sub: 'Every trade protected' },
+  { label: 'Global reach', sub: 'Millions of buyers worldwide' },
+  { label: 'Fast payouts', sub: 'Withdraw anytime' },
 ];
-
-const CTA_BUTTON_CLASS = `${AUTH_FORM_BUTTON_CLASS} px-6 py-3 text-base font-semibold rounded-2xl w-auto`;
 
 function MascotIllustration() {
   return (
@@ -20,7 +27,7 @@ function MascotIllustration() {
     >
       <motion.div
         animate={{ y: [0, -10, 0] }}
-        transition={{ repeat: Infinity, duration: 3.5, ease: "easeInOut" }}
+        transition={{ repeat: Infinity, duration: 3.5, ease: 'easeInOut' }}
       >
         <svg width="320" height="300" viewBox="0 0 320 300" fill="none" xmlns="http://www.w3.org/2000/svg">
           <ellipse cx="160" cy="285" rx="80" ry="12" fill="black" fillOpacity="0.25" />
@@ -72,20 +79,21 @@ export default function SellerHero({ onStartSelling }) {
 
   const handleClick = async () => {
     setClicking(true);
-    await new Promise((r) => setTimeout(r, 700));
+    await new Promise((resolve) => setTimeout(resolve, 700));
     onStartSelling();
+    setClicking(false);
   };
 
   return (
     <section className="relative min-h-[520px] flex flex-col overflow-hidden bg-[hsl(var(--background))]">
       <div
-        className="absolute inset-0 pointer-events-none opacity-[0.04]"
+        className="absolute inset-0 pointer-events-none opacity-[0.045]"
         style={{
           backgroundImage: `
             linear-gradient(hsl(var(--foreground)) 1px, transparent 1px),
             linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)
           `,
-          backgroundSize: "40px 40px",
+          backgroundSize: '40px 40px',
         }}
       />
 
@@ -97,7 +105,10 @@ export default function SellerHero({ onStartSelling }) {
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="text-5xl md:text-6xl font-black leading-[1.05] tracking-tight text-foreground mb-5"
           >
-            Start making<br />money on<br />
+            Start making
+            <br />
+            money on
+            <br />
             <span className="text-foreground">Bounty</span>
           </motion.h1>
           <motion.p
@@ -116,23 +127,25 @@ export default function SellerHero({ onStartSelling }) {
             <button
               onClick={handleClick}
               disabled={clicking}
-              className={CTA_BUTTON_CLASS}
-              style={CTA_BUTTON_STYLE}
+              className={START_BUTTON_CLASS}
+              style={START_BUTTON_STYLE}
+              onMouseEnter={(event) => {
+                event.currentTarget.style.background = '#E8C842';
+              }}
+              onMouseLeave={(event) => {
+                event.currentTarget.style.background = '#E8A020';
+              }}
             >
-              <span>{clicking ? "Opening…" : "Start Selling"}</span>
+              <span>{clicking ? 'Opening…' : 'Start Selling'}</span>
               <motion.span
-                animate={
-                  clicking
-                    ? { x: [0, 6, 0, 6, 0], opacity: [1, 1, 1, 1, 1] }
-                    : { x: 0 }
-                }
-                transition={{ duration: 0.6, ease: "easeInOut" }}
+                animate={clicking ? { x: [0, 6, 0, 6, 0], opacity: [1, 0.8, 1, 0.8, 1] } : { x: 0 }}
+                transition={{ duration: 0.6, ease: 'easeInOut' }}
                 className="text-lg font-black"
               >
                 {clicking ? (
                   <motion.span
                     animate={{ rotate: 360 }}
-                    transition={{ repeat: Infinity, duration: 0.6, ease: "linear" }}
+                    transition={{ repeat: Infinity, duration: 0.6, ease: 'linear' }}
                     className="inline-block"
                   >
                     ↻
@@ -141,7 +154,7 @@ export default function SellerHero({ onStartSelling }) {
                   <motion.span
                     className="inline-block"
                     animate={{ x: [0, 3, 0] }}
-                    transition={{ repeat: Infinity, duration: 1.4, ease: "easeInOut" }}
+                    transition={{ repeat: Infinity, duration: 1.4, ease: 'easeInOut' }}
                   >
                     ›
                   </motion.span>
@@ -181,3 +194,4 @@ export default function SellerHero({ onStartSelling }) {
     </section>
   );
 }
+
