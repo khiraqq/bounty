@@ -134,23 +134,19 @@ export async function handleLoginSubmit(event) {
 export async function handleSignupSubmit(event) {
   event.preventDefault();
   const username = document.getElementById('signup-username')?.value.trim();
-  const email = document.getElementById('signup-email')?.value.trim();
   const password = document.getElementById('signup-password')?.value;
   const confirmPassword = document.getElementById('signup-confirm-password')?.value;
-  if (!username || !email || !password || !confirmPassword) {
+  if (!username || !password || !confirmPassword) {
     showAuthError('signup', 'Please fill in all fields.'); return;
   }
   if (username.length < 3) { showAuthError('signup', 'Username must be at least 3 characters.'); return; }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    showAuthError('signup', 'Please enter a valid email address.'); return;
-  }
   if (password !== confirmPassword) { showAuthError('signup', 'Passwords do not match.'); return; }
   setAuthBtnLoading('signup-submit-btn', true);
   try {
     const res = await fetch('/api/auth/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, email, password }),
+      body: JSON.stringify({ username, password }),
     });
     const data = await res.json();
     if (!res.ok) { showAuthError('signup', data.message || 'Could not create account.'); return; }
@@ -158,7 +154,7 @@ export async function handleSignupSubmit(event) {
     closeModal();
     window.location.reload();
   } catch (_) {
-    persistSessionLocal(username, email, 'password');
+    persistSessionLocal(username, '', 'password');
     closeModal();
   } finally {
     setAuthBtnLoading('signup-submit-btn', false);
