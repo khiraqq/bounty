@@ -63,6 +63,12 @@ export default function Navbar() {
             />
           </div>
           <div id="auth-buttons" className="flex items-center gap-2">
+            <button
+              id="theme-toggle"
+              onClick={() => window.toggleTheme?.()}
+              title="Toggle theme"
+              className="px-2 py-1 rounded-md border border-border bg-transparent text-muted-foreground hover:text-foreground"
+            />
             <Link href="/become-a-seller" className={navButtonClass}>
               Become a seller
             </Link>

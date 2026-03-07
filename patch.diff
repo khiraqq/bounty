@@ -1,0 +1,54 @@
+*** Begin Patch
+*** Update File: components/seller/SellerHero.js
+@@
+-import { AUTH_FORM_BUTTON_CLASS } from '../authStyles';
++import { AUTH_FORM_BUTTON_CLASS, CTA_BUTTON_STYLE } from '../authStyles';
+@@
+-const START_BUTTON_STYLE = {
+-  background: '#E8A020',
+-  color: '#111',
+-  boxShadow: '0 10px 30px rgba(232, 160, 32, 0.45)',
+-  border: '1px solid rgba(232, 160, 32, 0.4)',
+-  borderTop: '1px solid rgba(255, 255, 255, 0.3)',
+-};
++const START_BUTTON_STYLE = CTA_BUTTON_STYLE;
+@@
+-export default function SellerHero({ onStartSelling }) {
++export default function SellerHero() {
+@@
+-  const [clicking, setClicking] = useState(false);
+-
+-  const handleClick = async () => {
+-    setClicking(true);
+-    await new Promise((resolve) => setTimeout(resolve, 700));
+-    onStartSelling();
+-    setClicking(false);
+-  };
++  const router = useRouter();
++  const [clicking, setClicking] = useState(false);
++
++  const handleClick = async () => {
++    setClicking(true);
++    await router.push('/seller/onboarding');
++    setClicking(false);
++  };
+@@
+-            <button
+-              onClick={handleClick}
+-              disabled={clicking}
+-              className={START_BUTTON_CLASS}
+-              style={START_BUTTON_STYLE}
+-              onMouseEnter={(event) => {
+-                event.currentTarget.style.background = '#E8C842';
+-              }}
+-              onMouseLeave={(event) => {
+-                event.currentTarget.style.background = '#E8A020';
+-              }}
+-            >
++            <button
++              onClick={handleClick}
++              disabled={clicking}
++              className={START_BUTTON_CLASS}
++              style={START_BUTTON_STYLE}
++            >
+*** End Patch

@@ -284,13 +284,13 @@ export default function AuthModal({
               </button>
             </form>
             <div className="mt-4 text-center text-xs flex items-center justify-center gap-1">
-              <span className="text-zinc-500">
+              <span className="text-muted-foreground">
                 {isSignup ? 'Already have an account?' : "Don't have an account?"}
               </span>
               <button
                 type="button"
                 onClick={() => onSwitch(isSignup ? 'login' : 'signup')}
-                className="text-white font-semibold underline underline-offset-4"
+                className="text-white font-bold underline underline-offset-4"
               >
                 {isSignup ? 'Login' : 'Sign up'}
               </button>
