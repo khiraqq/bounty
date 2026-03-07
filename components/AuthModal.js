@@ -6,18 +6,67 @@ import {
 } from './authStyles';
 
 function CaptchaBox({ code, onRefresh, onChange, value }) {
+  const seed = code.split('').reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
+  const horizontalLines = Array.from({ length: 6 }, (_, idx) => ({
+    x1: 6,
+    y1: 6 + idx * 8,
+    x2: 122,
+    y2: 6 + idx * 8,
+  }));
+  const verticalLines = Array.from({ length: 6 }, (_, idx) => ({
+    x1: 6 + idx * 18,
+    y1: 6,
+    x2: 6 + idx * 18,
+    y2: 44,
+  }));
+  const dots = Array.from({ length: 18 }, (_, idx) => {
+    const rand = Math.abs(Math.sin((seed + idx * 13) * 0.73));
+    return {
+      cx: 128 * rand,
+      cy: 52 * Math.abs(Math.cos((seed + idx * 22) * 0.19)),
+      r: 1 + rand * 1.2,
+      opacity: 0.04 + rand * 0.08,
+    };
+  });
+  const charTransforms = code.split('').map((char, idx) => {
+    const rotation = ((seed + idx * 17) % 31) - 15;
+    const x = 18 + idx * 30 + (((seed + idx * 11) % 10) - 5);
+    const y = 32 + (((seed + idx * 13) % 7) - 3);
+    return { char, rotation, x, y };
+  });
+
   return (
-    <div className="flex gap-3">
+    <div className="flex flex-nowrap gap-3">
       <div
-        className="relative flex h-[50px] w-32 items-center justify-center rounded-xl border border-white/10 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.15),_rgba(255,255,255,0))]"
-        style={{ backgroundSize: '120% 120%', backgroundPosition: 'center', backgroundColor: '#1f1f1f' }}
+        className="relative flex h-[50px] w-32 items-center justify-center rounded-xl border border-white/10 bg-[#131313]"
+        style={{ backgroundSize: '120% 120%', backgroundPosition: 'center' }}
       >
-        <span
-          className="text-3xl tracking-[0.2em] text-white"
-          style={{ fontFamily: "'Doto', sans-serif", transform: 'skew(-6deg)' }}
-        >
-          {code}
-        </span>
+        <svg width="128" height="52" viewBox="0 0 128 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0.5" y="0.5" width="127" height="51" rx="12" fill="#101010" stroke="rgba(255,255,255,0.05)" />
+          {horizontalLines.map((line, idx) => (
+            <line key={`h-${idx}`} {...line} stroke="#ffffff" strokeWidth="0.5" strokeOpacity="0.08" />
+          ))}
+          {verticalLines.map((line, idx) => (
+            <line key={`v-${idx}`} {...line} stroke="#ffffff" strokeWidth="0.5" strokeOpacity="0.08" />
+          ))}
+          {dots.map((dot, idx) => (
+            <circle key={`dot-${idx}`} cx={dot.cx} cy={dot.cy} r={dot.r} fill="#ffffff" opacity={dot.opacity} />
+          ))}
+          {charTransforms.map(({ char, rotation, x, y }, idx) => (
+            <text
+              key={`char-${idx}`}
+              x={x}
+              y={y}
+              fill="#ffffff"
+              fontSize="22"
+              fontFamily="'Doto', monospace"
+              transform={`rotate(${rotation} ${x} ${y})`}
+              style={{ letterSpacing: '0.2em' }}
+            >
+              {char}
+            </text>
+          ))}
+        </svg>
         <button
           type="button"
           className="absolute bottom-1 right-1 rounded-full bg-white/10 p-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground hover:bg-white/20"
