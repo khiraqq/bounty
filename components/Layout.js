@@ -360,7 +360,7 @@ export default function Layout({ children }) {
                 <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Verify you're human</p>
                 <div className="flex gap-3">
                   <div
-                    className="relative flex h-24 w-32 items-center justify-center rounded-xl border border-white/10 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.15),_rgba(255,255,255,0))]"
+                    className="relative flex h-[50px] w-32 items-center justify-center rounded-xl border border-white/10 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.15),_rgba(255,255,255,0))]"
                     style={{ backgroundSize: '120% 120%', backgroundPosition: 'center', backgroundColor: '#1f1f1f' }}
                   >
                     <span
@@ -371,9 +371,10 @@ export default function Layout({ children }) {
                     </span>
                     <button
                       type="button"
-                      className="absolute bottom-2 right-2 rounded-full bg-white/10 p-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground hover:bg-white/20"
+                      className="absolute bottom-1 right-1 rounded-full bg-white/10 p-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground hover:bg-white/20"
                       onClick={refreshCaptcha}
                       aria-label="Refresh captcha"
+                      style={{ height: '32px', width: '32px' }}
                     >
                       ↻
                     </button>
@@ -381,10 +382,12 @@ export default function Layout({ children }) {
                   <input
                     id="signup-captcha"
                     type="text"
-                    placeholder="ENTER CODE"
+                    placeholder="Enter code"
+                    maxLength={3}
                     value={captchaInput}
-                    onChange={(e) => setCaptchaInput(e.target.value)}
-                    className={CAPTCHA_INPUT_CLASS}
+                    onChange={(e) => setCaptchaInput(e.target.value.toUpperCase())}
+                    className="flex h-12 w-full rounded-md border border-[#1a1a1a] bg-[#0d0d0d] px-3 py-2 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 flex-1 font-mono tracking-widest uppercase text-center text-lg"
+                    style={{ height: 50 }}
                   />
                 </div>
               </div>
