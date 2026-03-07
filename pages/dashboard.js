@@ -82,17 +82,60 @@ export default function Dashboard() {
         {/* Stats row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           {[
-            { label: 'Active Listings', value: listings.filter(l => l.isActive).length, icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>, color: '#111111' },
-            { label: 'Pending Orders', value: pendingOrders, icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>, color: '#f59e0b' },
-            { label: 'Total Orders', value: orders.length, icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>, color: '#22c55e' },
-            { label: 'Revenue', value: '$' + totalRevenue.toFixed(2), icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>, color: '#16a34a' },
-          ].map(s => (
+            {
+              label: 'Active Listings',
+              value: listings.filter((l) => l.isActive).length,
+              icon: (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                  <line x1="3" y1="6" x2="21" y2="6" />
+                </svg>
+              ),
+            },
+            {
+              label: 'Pending Orders',
+              value: pendingOrders,
+              icon: (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
+              ),
+            },
+            {
+              label: 'Total Orders',
+              value: orders.length,
+              icon: (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <polyline points="9 11 12 14 22 4" />
+                  <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                </svg>
+              ),
+            },
+            {
+              label: 'Revenue',
+              value: '$' + totalRevenue.toFixed(2),
+              icon: (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="12" y1="1" x2="12" y2="23" />
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                </svg>
+              ),
+            },
+          ].map((s) => (
             <div key={s.label} className="bg-card border border-border rounded-xl p-4">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs text-muted-foreground font-medium">{s.label}</span>
-                <div className="h-8 w-8 rounded-lg flex items-center justify-center" style={{ background: s.color + '18', color: s.color }}>{s.icon}</div>
+                <div className="h-8 w-8 rounded-lg flex items-center justify-center bg-slate-800/70 text-white shadow-[0_0_15px_rgba(255,255,255,0.15)]">
+                  {s.icon}
+                </div>
               </div>
-              <div className="text-2xl font-black" style={{ color: s.color }}>{s.value}</div>
+              <div
+                className="text-2xl font-black text-white"
+                style={{ textShadow: '0 12px 25px rgba(255,255,255,0.2)' }}
+              >
+                {s.value}
+              </div>
             </div>
           ))}
         </div>
