@@ -102,7 +102,13 @@ function CaptchaBox({ code, onRefresh, onChange, value }) {
         title="Click to refresh captcha"
       >
         <svg width={CAPTCHA_WIDTH} height={CAPTCHA_HEIGHT} viewBox={`0 0 ${CAPTCHA_WIDTH} ${CAPTCHA_HEIGHT}`} fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="0.5" y="0.5" width={CAPTCHA_WIDTH - 1} height={CAPTCHA_HEIGHT - 1} rx="10" fill="#101010" stroke="rgba(255,255,255,0.05)" />
+          <defs>
+            <linearGradient id="captcha-bg" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#1d1f24" />
+              <stop offset="100%" stopColor="#131418" />
+            </linearGradient>
+          </defs>
+          <rect x="0.5" y="0.5" width={CAPTCHA_WIDTH - 1} height={CAPTCHA_HEIGHT - 1} rx="10" fill="url(#captcha-bg)" stroke="rgba(255,255,255,0.05)" />
           <line {...horizontalLine} stroke="#ffffff" strokeWidth="0.5" strokeOpacity="0.06" />
           <line {...verticalLine} stroke="#ffffff" strokeWidth="0.5" strokeOpacity="0.06" />
           {diagonalLines.map((line, idx) => (
@@ -313,5 +319,4 @@ export default function AuthModal({
     </AnimatePresence>
   );
 }
-
 
