@@ -129,10 +129,10 @@ function CaptchaBox({ code, onRefresh, onChange, value }) {
         id="auth-captcha"
         type="text"
         placeholder="Enter code"
-        maxLength={3}
+        maxLength={4}
         value={value}
         onChange={onChange}
-        className={CAPTCHA_INPUT_CLASS}
+        className={INPUT_FIELD_CLASS}
         style={{ height: 50 }}
       />
     </div>
