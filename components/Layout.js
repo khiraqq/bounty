@@ -1,6 +1,6 @@
-
+ï»¿
 // FILE: components/Layout.js
-// Global layout — sticky nav, single "Log In" button, auth modal, theme toggle
+// Global layout â€” sticky nav, single "Log In" button, auth modal, theme toggle
 
 import Link from 'next/link';
 import { useEffect } from 'react';
@@ -84,7 +84,7 @@ export default function Layout({ children }) {
       const lang = document.getElementById('language-select')?.value;
       const curr = document.getElementById('currency-select')?.value;
       const langMap = { en: 'EN', es: 'ES', fr: 'FR', de: 'DE', pt: 'PT', ja: 'JA' };
-      const currMap = { USD: 'USD - $', EUR: 'EUR - €', GBP: 'GBP - £', BRL: 'BRL - R$', JPY: 'JPY - ¥' };
+      const currMap = { USD: 'USD - $', EUR: 'EUR - â‚¬', GBP: 'GBP - Â£', BRL: 'BRL - R$', JPY: 'JPY - Â¥' };
       if (lang) document.getElementById('current-language').textContent = langMap[lang] || lang.toUpperCase();
       if (curr) document.getElementById('current-currency').textContent = currMap[curr] || curr;
       document.getElementById('locale-panel')?.classList.add('hidden');
@@ -203,11 +203,11 @@ export default function Layout({ children }) {
               <div id="locale-panel" className="hidden absolute right-0 top-full mt-2 w-52 rounded-xl border shadow-2xl z-50 p-4" style={{ background: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
                 <label className="block text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: 'hsl(var(--muted-foreground))' }}>Language</label>
                 <select id="language-select" className="w-full rounded-lg border px-3 py-2 text-sm outline-none mb-3" style={{ background: 'hsl(var(--background))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}>
-                  <option value="en">English</option><option value="es">Español</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="pt">Português</option><option value="ja">???</option>
+                  <option value="en">English</option><option value="es">EspaÃ±ol</option><option value="fr">FranÃ§ais</option><option value="de">Deutsch</option><option value="pt">PortuguÃªs</option><option value="ja">Japanese</option>
                 </select>
                 <label className="block text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: 'hsl(var(--muted-foreground))' }}>Currency</label>
                 <select id="currency-select" className="w-full rounded-lg border px-3 py-2 text-sm outline-none mb-3" style={{ background: 'hsl(var(--background))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}>
-                  <option value="USD">USD - $</option><option value="EUR">EUR - €</option><option value="GBP">GBP - £</option><option value="BRL">BRL - R$</option><option value="JPY">JPY - ¥</option>
+                  <option value="USD">USD - $</option><option value="EUR">EUR - â‚¬</option><option value="GBP">GBP - Â£</option><option value="BRL">BRL - R$</option><option value="JPY">JPY - Â¥</option>
                 </select>
                 <button onClick={() => window.saveLocaleSettings?.()} className="w-full rounded-lg py-1.5 text-sm font-semibold transition-opacity hover:opacity-80" style={{ background: 'hsl(var(--foreground))', color: 'hsl(var(--background))' }}>Save</button>
               </div>
@@ -246,7 +246,7 @@ export default function Layout({ children }) {
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'hsl(var(--muted-foreground))', flexShrink: 0 }}><circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" /></svg>
               <input
                 type="text"
-                placeholder="Search listings…"
+                placeholder="Search listingsâ€¦"
                 className="bg-transparent outline-none text-sm w-full"
                 style={{ color: 'hsl(var(--foreground))' }}
                 onKeyDown={e => { if (e.key === 'Enter' && e.target.value) window.location.href = '/browse?q=' + encodeURIComponent(e.target.value); }}
@@ -489,3 +489,5 @@ export default function Layout({ children }) {
     </>
   );
 }
+
+
