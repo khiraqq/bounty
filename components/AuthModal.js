@@ -26,11 +26,26 @@ function CaptchaBox({ code, onRefresh, onChange, value }) {
     return (result + 1) / 2;
   };
 
+  const horizontalGrid = Array.from({ length: 3 }, (_, idx) => {
+    const y = randomBetween(8, CAPTCHA_HEIGHT - 8, jitter(10 + idx));
+    return { x1: 6, x2: CAPTCHA_WIDTH - 6, y1: y, y2: y };
+  });
+  const verticalGrid = Array.from({ length: 3 }, (_, idx) => {
+    const x = randomBetween(8, CAPTCHA_WIDTH - 8, jitter(20 + idx));
+    return { x1: x, x2: x, y1: 6, y2: CAPTCHA_HEIGHT - 6 };
+  });
+  const noiseDots = Array.from({ length: 15 }, (_, idx) => ({
+    cx: randomBetween(6, CAPTCHA_WIDTH - 6, jitter(30 + idx)),
+    cy: randomBetween(6, CAPTCHA_HEIGHT - 6, jitter(40 + idx)),
+    r: randomBetween(0.6, 1.4, jitter(50 + idx)),
+    opacity: randomBetween(0.08, 0.18, jitter(60 + idx)),
+  }));
+
   const charTransforms = code.split('').map((char, idx) => {
-    const xBase = 28 + idx * 32;
-    const rotation = randomBetween(-15, 15, jitter(60 + idx));
-    const x = xBase + randomBetween(-6, 6, jitter(70 + idx)) - idx * 2;
-    const y = 32 + randomBetween(-5, 5, jitter(80 + idx));
+    const xBase = 28 + idx * 30;
+    const rotation = randomBetween(-14, 14, jitter(70 + idx));
+    const x = xBase + randomBetween(-5, 5, jitter(80 + idx)) - idx * 2;
+    const y = 32 + randomBetween(-4, 4, jitter(90 + idx));
     return { char, rotation, x, y };
   });
 
@@ -53,6 +68,27 @@ function CaptchaBox({ code, onRefresh, onChange, value }) {
             fill="#101010"
             stroke="rgba(255,255,255,0.08)"
           />
+          {horizontalGrid.map((line, idx) => (
+            <line
+              key={`hgrid-${idx}`}
+              {...line}
+              stroke="#ffffff"
+              strokeWidth="0.35"
+              strokeOpacity="0.12"
+            />
+          ))}
+          {verticalGrid.map((line, idx) => (
+            <line
+              key={`vgrid-${idx}`}
+              {...line}
+              stroke="#ffffff"
+              strokeWidth="0.35"
+              strokeOpacity="0.12"
+            />
+          ))}
+          {noiseDots.map((dot, idx) => (
+            <circle key={`dot-${idx}`} cx={dot.cx} cy={dot.cy} r={dot.r} fill="#ffffff" opacity={dot.opacity} />
+          ))}
           {charTransforms.map(({ char, rotation, x, y }, idx) => (
             <text
               key={`char-${idx}`}
@@ -115,10 +151,10 @@ export default function AuthModal({
   isCaptchaValid,
 }) {
   const isSignup = mode === 'signup';
-  const heading = isSignup ? 'Create an account' : 'Log In';
+  const heading = isSignup ? 'Create an account' : 'Welcome back';
   const subtitle = isSignup
     ? 'Enter your details to create a new account'
-    : 'Sign in to your Bounty account';
+    : 'Enter your username and password to access your account';
   const switchLabel = isSignup ? 'Have an account?' : 'No account?';
   const switchAction = isSignup ? 'Log in' : 'Sign up';
   const usernameId = isSignup ? 'signup-username' : 'login-username';
@@ -162,7 +198,7 @@ export default function AuthModal({
             <h2 className="text-3xl font-black text-center" style={{ fontFamily: "'Doto', sans-serif", fontWeight: 900 }}>
               {heading}
             </h2>
-            <p className="text-center text-sm text-muted-foreground mb-6">{subtitle}</p>
+            <p className="text-center text-sm mb-6" style={{ color: 'hsl(var(--muted-foreground))' }}>{subtitle}</p>
             <p id="login-error" className={`hidden text-sm text-red-500 mb-4 text-center rounded-lg bg-red-500/10 px-3 py-2${isSignup ? ' hidden' : ''}`} />
             <p id="signup-error" className={`hidden text-sm text-red-500 mb-4 text-center rounded-lg bg-red-500/10 px-3 py-2${isSignup ? '' : ' hidden'}`} />
             <form id={formId} className="space-y-4">
