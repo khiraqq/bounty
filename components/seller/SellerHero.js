@@ -1,9 +1,9 @@
-﻿// FILE: components/seller/SellerHero.js
-// Place at: components/seller/SellerHero.js
+// FILE: components/seller/SellerHero.js
+// Become-a-Seller hero — mascot REMOVED (was the "butterfly"), clean hero only
 
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
-import { AUTH_FORM_BUTTON_CLASS } from '../authStyles';
 
 const STATS = [
   { label: 'Safe sales', sub: 'Protected by TradeShield' },
@@ -12,18 +12,17 @@ const STATS = [
 ];
 
 export default function SellerHero() {
+  const router = useRouter();
   const [clicking, setClicking] = useState(false);
 
-  const handleClick = () => {
-    if (clicking) return;
+  const handleClick = async () => {
     setClicking(true);
-    window.handleStartSelling?.();
-    setTimeout(() => setClicking(false), 800);
+    await new Promise((resolve) => setTimeout(resolve, 600));
+    router.push('/seller/onboarding');
   };
 
   return (
-    <section className="relative min-h-[520px] flex flex-col overflow-hidden" style={{ background: 'hsl(var(--background))' }}>
-      {/* Grid texture */}
+    <section className="relative min-h-[480px] flex flex-col overflow-hidden" style={{ background: 'hsl(var(--background))' }}>
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -33,17 +32,19 @@ export default function SellerHero() {
         }}
       />
 
-      <div className="relative z-10 mx-auto max-w-7xl w-full px-6 pt-16 pb-0 flex items-center justify-between gap-8">
-        <div className="flex-1 max-w-xl">
-          <motion.h1
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      <div className="relative z-10 mx-auto max-w-7xl w-full px-6 pt-20 pb-0 flex flex-col justify-center">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="max-w-2xl"
+        >
+          <h1
             className="text-5xl md:text-6xl font-black leading-[1.05] tracking-tight mb-5"
             style={{ fontFamily: "'Doto', sans-serif", color: 'hsl(var(--foreground))' }}
           >
             Start making<br />money on<br />Bounty
-          </motion.h1>
+          </h1>
 
           <motion.p
             initial={{ opacity: 0, y: 16 }}
@@ -63,37 +64,32 @@ export default function SellerHero() {
             <button
               onClick={handleClick}
               disabled={clicking}
-              className={`${AUTH_FORM_BUTTON_CLASS} disabled:opacity-70 flex items-center justify-between gap-2`}
-              style={{ minWidth: 160 }}
+              className="inline-flex items-center justify-center gap-2.5 rounded-xl font-bold text-base transition-all duration-200 disabled:opacity-70"
+              style={{
+                padding: '0.875rem 1.75rem',
+                background: 'hsl(var(--foreground))',
+                color: 'hsl(var(--background))',
+                minWidth: 160,
+              }}
             >
               <span>{clicking ? 'Loading…' : 'Start Selling'}</span>
               {clicking ? (
-                <motion.span
-                  animate={{ rotate: 360 }}
-                  transition={{ repeat: Infinity, duration: 0.8, ease: 'linear' }}
-                  className="inline-block text-lg"
-                >
-                  ⟳
-                </motion.span>
+                <motion.span animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 0.6, ease: 'linear' }} className="inline-block text-lg">↻</motion.span>
               ) : (
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M6 12h12" />
-                  <path d="M14 6l6 6-6 6" />
-                </svg>
+                <motion.span className="inline-block text-xl font-black" animate={{ x: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 1.4, ease: 'easeInOut' }}>
+                  ›
+                </motion.span>
               )}
             </button>
           </motion.div>
-        </div>
+        </motion.div>
 
-      </div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.3 }}
-        className="relative z-10 mx-auto max-w-7xl w-full px-6 mt-10 pb-12"
-      >
-        <div className="flex flex-wrap gap-3">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="flex flex-wrap gap-3 mt-12 pb-12"
+        >
           {STATS.map((s, i) => (
             <motion.div
               key={s.label}
@@ -107,10 +103,8 @@ export default function SellerHero() {
               <span className="text-xs mt-0.5" style={{ color: 'hsl(var(--muted-foreground))' }}>{s.sub}</span>
             </motion.div>
           ))}
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
     </section>
   );
 }
-
-
