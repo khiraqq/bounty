@@ -17,6 +17,13 @@ const TRENDING_ITEMS = [
   'Diablo IV Gold',
 ];
 
+const LIVE_STATS = [
+  { value: 2000000, label: 'Paid to Sellers', prefix: '$', suffix: '+' },
+  { value: 50000, label: 'Active Sellers', suffix: '+' },
+  { value: 200, label: 'Games Supported', suffix: '+' },
+  { value: 4.9, label: 'Avg Rating', suffix: '★', decimals: 1 },
+];
+
 const POPULAR_ACCOUNTS = [
   { name: 'Grand Theft Auto 5', color: '#1a6b3a', letter: 'G' },
   { name: 'Fortnite', color: '#1a5fa8', letter: 'F' },
@@ -85,13 +92,27 @@ function PhonePlaceholder({ step }) {
 // -- Main component ------------------------------------------------------------
 export default function Home() {
   const trendingRef = useRef(null);
-  const [trendIdx, setTrendIdx] = useState(0);
+  const [liveValues, setLiveValues] = useState(LIVE_STATS.map(() => 0));
 
   const scrollTrend = (dir) => {
     const el = trendingRef.current;
     if (!el) return;
     el.scrollBy({ left: dir * 260, behavior: 'smooth' });
   };
+
+  useEffect(() => {
+    const duration = 900;
+    let frame;
+    const start = performance.now();
+    const animate = (time) => {
+      const progress = Math.min((time - start) / duration, 1);
+      const eased = progress * (2 - progress);
+      setLiveValues(LIVE_STATS.map((stat) => stat.value * eased));
+      if (progress < 1) frame = requestAnimationFrame(animate);
+    };
+    frame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(frame);
+  }, []);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -176,21 +197,22 @@ export default function Home() {
               Live Stats
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {[
-                ['$2M+', 'Paid to Sellers'],
-                ['50K+', 'Active Sellers'],
-                ['200+', 'Games Supported'],
-                ['4.9?', 'Avg Rating'],
-              ].map(([val, label]) => (
-                <div
-                  key={val}
-                  className="rounded-xl px-5 py-4 border"
-                  style={{ background: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}
-                >
-                  <div className="text-xl font-semibold" style={{ color: 'hsl(var(--foreground))' }}>{val}</div>
-                  <div className="text-xs mt-1 font-medium" style={{ color: 'hsl(var(--muted-foreground))' }}>{label}</div>
-                </div>
-              ))}
+              {LIVE_STATS.map((stat, i) => {
+                const value = liveValues[i];
+                const formatted = stat.decimals ? value.toFixed(stat.decimals) : Math.round(value).toLocaleString();
+                return (
+                  <div
+                    key={stat.label}
+                    className="rounded-xl px-5 py-4 border"
+                    style={{ background: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}
+                  >
+                    <div className="text-xl font-semibold" style={{ color: 'hsl(var(--foreground))' }}>
+                      {stat.prefix ?? ''}{formatted}{stat.suffix ?? ''}
+                    </div>
+                    <div className="text-xs mt-1 font-medium" style={{ color: 'hsl(var(--muted-foreground))' }}>{stat.label}</div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -526,4 +548,6 @@ function renderCard(l) {
 }
 
 function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+
 

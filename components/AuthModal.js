@@ -19,7 +19,7 @@ const seededValue = (code) =>
 const randomBetween = (min, max, value) => min + (max - min) * value;
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
-function CaptchaBox({ code, onRefresh, onChange, value }) {
+function CaptchaBox({ code, onRefresh, onChange, value, isCaptchaValid }) {
   const seed = seededValue(code);
   const jitter = (offset) => {
     const result = Math.sin((seed + offset) * 0.37);
@@ -49,8 +49,10 @@ function CaptchaBox({ code, onRefresh, onChange, value }) {
     return { char, rotation, x, y };
   });
 
+  const isInvalid = value && !isCaptchaValid;
+
   return (
-    <div className="flex flex-nowrap gap-3">
+    <div className="flex flex-col gap-2">
       <button
         type="button"
         className={CAPTCHA_BUTTON_CLASS}
@@ -125,16 +127,21 @@ function CaptchaBox({ code, onRefresh, onChange, value }) {
           </svg>
         </div>
       </button>
-      <input
+      <motion.input
         id="auth-captcha"
         type="text"
         placeholder="Enter code"
-        maxLength={4}
+        maxLength={3}
         value={value}
         onChange={onChange}
-        className={INPUT_FIELD_CLASS}
+        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 flex-1 font-mono tracking-widest uppercase text-center text-lg"
         style={{ height: 50 }}
+        animate={isInvalid ? { x: [0, -4, 4, -4, 0] } : { x: 0 }}
+        transition={{ duration: 0.4 }}
       />
+      {isInvalid && (
+        <p className="text-xs font-semibold text-black dark:text-white">Invalid Captcha</p>
+      )}
     </div>
   );
 }
@@ -241,6 +248,7 @@ export default function AuthModal({
                   value={captchaInput}
                   onChange={onCaptchaChange}
                   onRefresh={refreshCaptcha}
+                  isCaptchaValid={isCaptchaValid}
                 />
               </div>
               <button
@@ -292,4 +300,5 @@ export default function AuthModal({
     </AnimatePresence>
   );
 }
+
 

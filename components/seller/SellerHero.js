@@ -63,22 +63,23 @@ export default function SellerHero() {
             <button
               onClick={handleClick}
               disabled={clicking}
-              className={`${AUTH_FORM_BUTTON_CLASS} disabled:opacity-70`}
+              className={`${AUTH_FORM_BUTTON_CLASS} disabled:opacity-70 flex items-center justify-between gap-2`}
               style={{ minWidth: 160 }}
             >
-              <span>{clicking ? 'Loadingâ€¦' : 'Start Selling'}</span>
+              <span>{clicking ? 'Loading…' : 'Start Selling'}</span>
               {clicking ? (
                 <motion.span
                   animate={{ rotate: 360 }}
-                  transition={{ repeat: Infinity, duration: 0.6, ease: 'linear' }}
+                  transition={{ repeat: Infinity, duration: 0.8, ease: 'linear' }}
                   className="inline-block text-lg"
-                >â†»</motion.span>
+                >
+                  ⟳
+                </motion.span>
               ) : (
-                <motion.span
-                  className="inline-block text-xl font-black"
-                  animate={{ x: [0, 4, 0] }}
-                  transition={{ repeat: Infinity, duration: 1.4, ease: 'easeInOut' }}
-                >â€º</motion.span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M6 12h12" />
+                  <path d="M14 6l6 6-6 6" />
+                </svg>
               )}
             </button>
           </motion.div>
@@ -111,4 +112,5 @@ export default function SellerHero() {
     </section>
   );
 }
+
 
