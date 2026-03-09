@@ -1,5 +1,5 @@
 // FILE: components/seller/SellerHero.js
-// Become-a-Seller hero — mascot REMOVED (was the "butterfly"), clean hero only
+// Clean hero — mascot removed, pure framer-motion, no DOM manipulation
 
 import { useState } from 'react';
 import { useRouter } from 'next/router';
@@ -15,24 +15,30 @@ export default function SellerHero() {
   const router = useRouter();
   const [clicking, setClicking] = useState(false);
 
-  const handleClick = async () => {
+  async function handleClick() {
     setClicking(true);
-    await new Promise((resolve) => setTimeout(resolve, 600));
+    await new Promise(r => setTimeout(r, 500));
     router.push('/seller/onboarding');
-  };
+  }
 
   return (
-    <section className="relative min-h-[480px] flex flex-col overflow-hidden" style={{ background: 'hsl(var(--background))' }}>
+    <section
+      className="relative min-h-[480px] flex flex-col overflow-hidden"
+      style={{ background: 'hsl(var(--background))' }}
+    >
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           opacity: 0.04,
-          backgroundImage: `linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)`,
+          backgroundImage: [
+            'linear-gradient(hsl(var(--foreground)) 1px, transparent 1px)',
+            'linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)',
+          ].join(', '),
           backgroundSize: '40px 40px',
         }}
       />
 
-      <div className="relative z-10 mx-auto max-w-7xl w-full px-6 pt-20 pb-0 flex flex-col justify-center">
+      <div className="relative z-10 mx-auto max-w-7xl w-full px-6 pt-20 pb-12 flex flex-col justify-center">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
@@ -64,20 +70,37 @@ export default function SellerHero() {
             <button
               onClick={handleClick}
               disabled={clicking}
-              className="inline-flex items-center justify-center gap-2.5 rounded-xl font-bold text-base transition-all duration-200 disabled:opacity-70"
+              className="inline-flex items-center justify-center gap-2.5 rounded-xl font-bold text-base transition-all duration-200"
               style={{
                 padding: '0.875rem 1.75rem',
                 background: 'hsl(var(--foreground))',
                 color: 'hsl(var(--background))',
                 minWidth: 160,
+                opacity: clicking ? 0.7 : 1,
+                cursor: clicking ? 'not-allowed' : 'pointer',
               }}
             >
-              <span>{clicking ? 'Loading…' : 'Start Selling'}</span>
+              <span>{clicking ? 'Loading...' : 'Start Selling'}</span>
               {clicking ? (
-                <motion.span animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 0.6, ease: 'linear' }} className="inline-block text-lg">↻</motion.span>
+                <motion.span
+                  animate={{ rotate: 360 }}
+                  transition={{ repeat: Infinity, duration: 0.6, ease: 'linear' }}
+                  className="inline-block"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+                    <path d="M21 3v5h-5" />
+                  </svg>
+                </motion.span>
               ) : (
-                <motion.span className="inline-block text-xl font-black" animate={{ x: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 1.4, ease: 'easeInOut' }}>
-                  ›
+                <motion.span
+                  animate={{ x: [0, 4, 0] }}
+                  transition={{ repeat: Infinity, duration: 1.4, ease: 'easeInOut' }}
+                  className="inline-block"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
+                  </svg>
                 </motion.span>
               )}
             </button>
@@ -88,7 +111,7 @@ export default function SellerHero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="flex flex-wrap gap-3 mt-12 pb-12"
+          className="flex flex-wrap gap-3 mt-12"
         >
           {STATS.map((s, i) => (
             <motion.div
@@ -97,7 +120,11 @@ export default function SellerHero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.35 + i * 0.07 }}
               className="flex flex-col px-5 py-3 rounded-2xl border"
-              style={{ minWidth: 170, background: 'hsl(var(--secondary))', borderColor: 'hsl(var(--border))' }}
+              style={{
+                minWidth: 170,
+                background: 'hsl(var(--secondary))',
+                borderColor: 'hsl(var(--border))',
+              }}
             >
               <span className="text-sm font-bold" style={{ color: 'hsl(var(--foreground))' }}>{s.label}</span>
               <span className="text-xs mt-0.5" style={{ color: 'hsl(var(--muted-foreground))' }}>{s.sub}</span>
