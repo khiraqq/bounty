@@ -580,7 +580,7 @@ export default function ListingDetailPage() {
                       cursor:      isLoading ? 'not-allowed' : 'pointer',
                     }}
                     onMouseEnter={e => { if (!isLoading) e.currentTarget.style.opacity = '0.85'; }}
-                    onMouseLeave={e => { e.currentTarget.style.opacity = isLoading ? '0.5' : '1'; }}
+                    onMouseLeave={e => { e.currentTarget.style.opacity = isLoading ? 0.5 : '1'; }}
                   >
                     Buy now
                   </button>
