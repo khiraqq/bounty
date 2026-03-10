@@ -59,22 +59,7 @@ export default function ListingPage() {
 
   const handleBuy = async () => {
     if (typeof window === 'undefined') return;
-    if (!window.ensureAuthenticated?.()) return;
-    const tok = localStorage.getItem('bounty_token');
-    if (!tok) return;
-    setOrderLoading(true);
-    setOrderMsg('');
-    try {
-      const res = await fetch('/api/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tok },
-        body: JSON.stringify({ listingId: listing._id, sellerUsername: listing.sellerUsername, game: listing.game, category: listing.category, title: listing.title, quantity, price: listing.price }),
-      });
-      const data = await res.json();
-      if (res.ok) { setOrderMsg('âœ… Order placed! Check your orders page.'); }
-      else setOrderMsg('âŒ ' + (data.message || 'Failed to place order'));
-    } catch { setOrderMsg('âŒ Network error'); }
-    setOrderLoading(false);
+    router.push('/checkout?listingId=' + listing._id);
   };
 
   const total = listing ? (quantity / (listing.minOrder || 1) * listing.price).toFixed(2) : '0.00';

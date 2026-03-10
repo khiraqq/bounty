@@ -267,7 +267,7 @@ function renderCard(l) {
     '</div>' +
     '<div class="flex items-end justify-between pt-2 border-t" style="border-color:hsl(var(--border)/0.5)">' +
       '<div><div class="text-xs text-muted-foreground mb-0.5">' + esc(l.priceUnit || 'per unit') + '</div><div class="text-lg font-black" style="color:var(--brand)">$' + Number(l.price).toFixed(2) + '</div></div>' +
-      '<button class="buy-btn" onclick="event.preventDefault();window.openModal&&window.openModal(\'login\')">Buy Now</button>' +
+      '<button class="buy-btn" onclick="window.location.href=\'/checkout?listingId=' + l._id + '\'">Buy Now</button>' +
     '</div>' +
   '</a>';
 }
