@@ -4,6 +4,7 @@
 // Env vars required:
 //   ADMIN_DASHBOARD_PASSWORD  — the admin password (set in .env.local)
 
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' });

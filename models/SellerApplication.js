@@ -1,4 +1,4 @@
-// FILE: models/SellerApplication.js
+﻿// FILE: models/SellerApplication.js
 import mongoose from 'mongoose';
 
 const SellerApplicationSchema = new mongoose.Schema(
@@ -12,22 +12,23 @@ const SellerApplicationSchema = new mongoose.Schema(
     username: { type: String, required: true },
     email:    { type: String, default: '' },
 
-    // ── Onboarding form answers ──────────────────────────────────────────────
     categories:    { type: [String], default: [] },
-    experience:    { type: String, default: '' },      // 'new' | 'experienced'
+    experience:    { type: String, default: '' },
     platforms:     { type: String, default: '' },
     reputation:    { type: String, default: '' },
     sourcing:      { type: String, default: '' },
     deliverySpeed: { type: String, default: '' },
     discord:       { type: String, default: '' },
 
-    // ── Network / meta ───────────────────────────────────────────────────────
     ipAddress: { type: String, default: '' },
     userAgent: { type: String, default: '' },
 
-    // ── Status ───────────────────────────────────────────────────────────────
-    // 'pending' | 'approved' | 'rejected'
-    status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending', index: true },
+    status: {
+      type: String,
+      enum: ['pending', 'reviewing', 'approved', 'rejected'],
+      default: 'pending',
+      index: true,
+    },
 
     reviewedBy:  { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
     reviewedAt:  { type: Date, default: null },
@@ -38,3 +39,4 @@ const SellerApplicationSchema = new mongoose.Schema(
 
 export default mongoose.models.SellerApplication ||
   mongoose.model('SellerApplication', SellerApplicationSchema);
+
