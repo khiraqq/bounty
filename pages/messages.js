@@ -1,7 +1,6 @@
 ﻿// FILE: pages/messages.js
 import { useState, useEffect, useCallback } from 'react';
 import Head from 'next/head';
-import Layout from '../components/Layout';
 
 const DOTO = { fontFamily: "'Doto', sans-serif" };
 const S = {
@@ -173,7 +172,7 @@ export default function MessagesPage() {
   }
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>Messages — Bounty</title>
       </Head>
@@ -370,6 +369,6 @@ export default function MessagesPage() {
           </div>
         </div>
       )}
-    </Layout>
+    </>
   );
 }
