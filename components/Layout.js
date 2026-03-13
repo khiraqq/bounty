@@ -291,6 +291,7 @@ export default function Layout({ children }) {
       {/* TOP BAR */}
       <div
         className="border-b text-xs"
+        data-top-bar="true"
         style={{ background: 'hsl(var(--topbar))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--topbar-foreground))' }}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-1.5">
@@ -339,6 +340,7 @@ export default function Layout({ children }) {
 
       {/* MAIN NAV */}
       <nav
+        data-main-nav="true"
         className="sticky top-0 z-40 border-b"
         style={{ background: 'hsl(var(--nav))', borderColor: 'hsl(var(--border))' }}
       >

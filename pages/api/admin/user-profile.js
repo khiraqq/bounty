@@ -4,7 +4,7 @@ import dbConnect from '../../../utils/dbConnect';
 import User from '../../../models/User';
 import Order from '../../../models/Order';
 import Listing from '../../../models/Listing';
-import { requireAuth } from '../../../utils/auth';
+import { requireAuth } from '../../../utils/serverAuth';
 import { calculateRiskScore } from '../../../utils/riskScore';
 
 async function assertAdmin(req, res) {

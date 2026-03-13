@@ -1,7 +1,7 @@
 ﻿// FILE: pages/api/messages/index.js
 import dbConnect from '../../../utils/dbConnect';
 import Message from '../../../models/Message';
-import { requireAuth } from '../../../utils/auth';
+import { requireAuth } from '../../../utils/serverAuth';
 
 export default async function handler(req, res) {
   const auth = requireAuth(req);

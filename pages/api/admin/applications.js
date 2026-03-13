@@ -3,7 +3,7 @@ import dbConnect from '../../../utils/dbConnect';
 import User from '../../../models/User';
 import SellerApplication from '../../../models/SellerApplication';
 import Message from '../../../models/Message';
-import { requireAuth } from '../../../utils/auth';
+import { requireAuth } from '../../../utils/serverAuth';
 
 // ── System message templates ─────────────────────────────────────────────────
 const MESSAGES = {

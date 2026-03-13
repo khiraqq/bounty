@@ -2,7 +2,7 @@
 import dbConnect from '../../../utils/dbConnect';
 import User from '../../../models/User';
 import SellerApplication from '../../../models/SellerApplication';
-import { requireAuth } from '../../../utils/auth';
+import { requireAuth } from '../../../utils/serverAuth';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {

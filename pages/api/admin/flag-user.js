@@ -1,7 +1,7 @@
 // FILE: pages/api/admin/flag-user.js
 import dbConnect from '../../../utils/dbConnect';
 import User from '../../../models/User';
-import { requireAuth } from '../../../utils/auth';
+import { requireAuth } from '../../../utils/serverAuth';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ message: 'Method not allowed' });

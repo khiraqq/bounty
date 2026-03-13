@@ -127,6 +127,17 @@ export default function MessagesPage() {
     }
   }, []);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    ['data-top-bar', 'data-main-nav'].forEach(attr => {
+      const nodes = document.querySelectorAll(`[${attr}]`);
+      if (nodes.length <= 1) return;
+      nodes.forEach((node, index) => {
+        if (index > 0) node.remove();
+      });
+    });
+  }, []);
+
   const fetchMessages = useCallback(async () => {
     if (!token) return;
     setLoading(true);
