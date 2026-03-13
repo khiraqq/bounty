@@ -1,6 +1,6 @@
-// FILE: pages/admin.js
-// Admin Dashboard — Pending Applications + Suspicious Activity (gated)
-// Pure React — no document.getElementById, no innerHTML, all client-side guards in useEffect
+ï»¿// FILE: pages/admin.js
+// Admin Dashboard â€” Pending Applications + Suspicious Activity (gated)
+// Pure React â€” no document.getElementById, no innerHTML, all client-side guards in useEffect
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Head from 'next/head';
@@ -43,17 +43,17 @@ function riskColor(score) {
 
 // -- Tiny helpers --------------------------------------------------------------
 function fmt(date) {
-  if (!date) return '—';
+  if (!date) return 'â€”';
   return new Date(date).toLocaleDateString('en-US', {
     year: 'numeric', month: 'short', day: 'numeric',
     hour: '2-digit', minute: '2-digit',
   });
 }
 function fmtDate(date) {
-  if (!date) return '—';
+  if (!date) return 'â€”';
   return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 }
-function shortId(id) { return id ? String(id).slice(-8) : '—'; }
+function shortId(id) { return id ? String(id).slice(-8) : 'â€”'; }
 
 // -- Spinner -------------------------------------------------------------------
 function Spinner() {
@@ -107,23 +107,23 @@ function StatusBadge({ status }) {
 }
 
 // -----------------------------------------------------------------------------
-// TAB 1 — Pending Applications
+// TAB 1 â€” Pending Applications
 // -----------------------------------------------------------------------------
 function ApplicationDetailModal({ app, onClose, onReview, onApprove, onReject, loading }) {
   if (!app) return null;
   const rows = [
     ['Username',       app.username],
-    ['Email',          app.email || '—'],
+    ['Email',          app.email || 'â€”'],
     ['Submitted',      fmt(app.createdAt)],
-    ['IP Address',     app.ipAddress || '—'],
-    ['User Agent',     app.userAgent ? app.userAgent.slice(0, 80) + '…' : '—'],
-    ['Categories',     (app.categories || []).join(', ') || '—'],
-    ['Experience',     app.experience || '—'],
-    ['Platforms',      app.platforms  || '—'],
-    ['Reputation',     app.reputation || '—'],
-    ['Sourcing',       app.sourcing   || '—'],
-    ['Delivery Speed', app.deliverySpeed || '—'],
-    ['Discord',        app.discord    || '—'],
+    ['IP Address',     app.ipAddress || 'â€”'],
+    ['User Agent',     app.userAgent ? app.userAgent.slice(0, 80) + 'â€¦' : 'â€”'],
+    ['Categories',     (app.categories || []).join(', ') || 'â€”'],
+    ['Experience',     app.experience || 'â€”'],
+    ['Platforms',      app.platforms  || 'â€”'],
+    ['Reputation',     app.reputation || 'â€”'],
+    ['Sourcing',       app.sourcing   || 'â€”'],
+    ['Delivery Speed', app.deliverySpeed || 'â€”'],
+    ['Discord',        app.discord    || 'â€”'],
   ];
 
   return (
@@ -146,7 +146,7 @@ function ApplicationDetailModal({ app, onClose, onReview, onApprove, onReject, l
         <div className="flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'hsl(var(--border))' }}>
           <div>
             <h3 className="font-black text-lg" style={{ ...DOTO, color: 'hsl(var(--foreground))' }}>
-              Application — {app.username}
+              Application â€” {app.username}
             </h3>
             <p className="text-xs mt-0.5" style={S.muted}>{shortId(app._id)}</p>
           </div>
