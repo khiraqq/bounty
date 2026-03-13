@@ -108,7 +108,8 @@ export default function Home() {
         window.history.replaceState({}, '', '/');
         window.location.reload();
       }
-    }, []);
+    }
+  }, []);
 
   return (
     <>
