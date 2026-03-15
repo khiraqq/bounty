@@ -6,7 +6,6 @@
 export const STORAGE_KEYS = {
   theme: 'theme',
   authenticatedUser: 'authenticated_username',
-  email: 'authenticated_email',
   authMethod: 'auth_method',
   token: 'bounty_token',
   profileAvatar: 'profile_avatar_data_url',
@@ -122,7 +121,7 @@ export async function handleLoginSubmit(event) {
     closeModal();
     window.location.reload();
   } catch (_) {
-    persistSessionLocal(username, '', 'password');
+    persistSessionLocal(username, 'password');
     closeModal();
   } finally {
     setAuthBtnLoading('login-submit-btn', false);
@@ -154,7 +153,7 @@ export async function handleSignupSubmit(event) {
     closeModal();
     window.location.reload();
   } catch (_) {
-    persistSessionLocal(username, '', 'password');
+    persistSessionLocal(username, 'password');
     closeModal();
   } finally {
     setAuthBtnLoading('signup-submit-btn', false);
@@ -170,20 +169,18 @@ export function persistSession(data, method) {
   const { token, user } = data;
   if (token) localStorage.setItem(STORAGE_KEYS.token, token);
   if (user && user.username) localStorage.setItem(STORAGE_KEYS.authenticatedUser, user.username);
-  if (user && user.email) localStorage.setItem(STORAGE_KEYS.email, user.email);
   localStorage.setItem(STORAGE_KEYS.authMethod, method);
   syncAuthUI(true, (user && user.username) || '');
 }
 
-export function persistSessionLocal(username, email, method) {
+export function persistSessionLocal(username, method) {
   localStorage.setItem(STORAGE_KEYS.authenticatedUser, username);
-  if (email) localStorage.setItem(STORAGE_KEYS.email, email);
   localStorage.setItem(STORAGE_KEYS.authMethod, method);
   syncAuthUI(true, username);
 }
 
-export function setAuthenticatedUser(username, email, method) {
-  persistSessionLocal(username, email, method || 'password');
+export function setAuthenticatedUser(username, method) {
+  persistSessionLocal(username, method || 'password');
 }
 
 export function restoreAuthState() {
@@ -195,7 +192,6 @@ export function restoreAuthState() {
 export function logout() {
   localStorage.removeItem(STORAGE_KEYS.token);
   localStorage.removeItem(STORAGE_KEYS.authenticatedUser);
-  localStorage.removeItem(STORAGE_KEYS.email);
   localStorage.removeItem(STORAGE_KEYS.authMethod);
   fetch('/api/auth/logout', { method: 'POST' }).catch(function () {});
   syncAuthUI(false);
