@@ -12,6 +12,7 @@ const SellerApplicationSchema = new mongoose.Schema(
     username: { type: String, required: true },
     email:    { type: String, default: '' },
 
+    // ── Onboarding form answers ──────────────────────────────────────────────
     categories:    { type: [String], default: [] },
     experience:    { type: String, default: '' },
     platforms:     { type: String, default: '' },
@@ -20,9 +21,12 @@ const SellerApplicationSchema = new mongoose.Schema(
     deliverySpeed: { type: String, default: '' },
     discord:       { type: String, default: '' },
 
+    // ── Network / meta ───────────────────────────────────────────────────────
     ipAddress: { type: String, default: '' },
     userAgent: { type: String, default: '' },
 
+    // ── Status ───────────────────────────────────────────────────────────────
+    // 'pending' | 'reviewing' | 'approved' | 'rejected'
     status: {
       type: String,
       enum: ['pending', 'reviewing', 'approved', 'rejected'],
@@ -39,4 +43,3 @@ const SellerApplicationSchema = new mongoose.Schema(
 
 export default mongoose.models.SellerApplication ||
   mongoose.model('SellerApplication', SellerApplicationSchema);
-

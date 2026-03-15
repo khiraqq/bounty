@@ -1,6 +1,7 @@
 ﻿// FILE: pages/messages.js
 import { useState, useEffect, useCallback } from 'react';
 import Head from 'next/head';
+import Layout from '../components/Layout';
 
 const DOTO = { fontFamily: "'Doto', sans-serif" };
 const S = {
@@ -23,6 +24,7 @@ function timeAgo(date) {
   return new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
+// ── Bounty Official badge — white-bordered box, black text + black checkmark ──
 function OfficialBadge() {
   return (
     <span
@@ -43,7 +45,11 @@ function OfficialBadge() {
         flexShrink:     0,
       }}
     >
-      <svg width="10" height="10" viewBox="0 0 12 12" fill="none" style={{ marginTop: '0px' }}>
+      {/* Black checkmark */}
+      <svg
+        width="10" height="10" viewBox="0 0 12 12" fill="none"
+        style={{ marginTop: '0px' }}
+      >
         <polyline
           points="2,6 5,9 10,3"
           stroke="#000000"
@@ -57,9 +63,11 @@ function OfficialBadge() {
   );
 }
 
+// ── Bounty Official sender row ─────────────────────────────────────────────────
 function OfficialSender() {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      {/* Blank avatar circle */}
       <div
         style={{
           width:        '36px',
@@ -80,6 +88,7 @@ function OfficialSender() {
   );
 }
 
+// ── Spinner ────────────────────────────────────────────────────────────────────
 function Spinner() {
   return (
     <div className="flex items-center justify-center py-20">
@@ -95,6 +104,7 @@ function Spinner() {
   );
 }
 
+// ── Subtype label ──────────────────────────────────────────────────────────────
 function subtypeTag(subtype) {
   const map = {
     application_reviewing: { label: 'Under Review',  color: '#3b82f6' },
@@ -127,17 +137,6 @@ export default function MessagesPage() {
     }
   }, []);
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    ['data-top-bar', 'data-main-nav'].forEach(attr => {
-      const nodes = document.querySelectorAll(`[${attr}]`);
-      if (nodes.length <= 1) return;
-      nodes.forEach((node, index) => {
-        if (index > 0) node.remove();
-      });
-    });
-  }, []);
-
   const fetchMessages = useCallback(async () => {
     if (!token) return;
     setLoading(true);
@@ -162,6 +161,7 @@ export default function MessagesPage() {
   async function openMessage(msg) {
     setSelected(msg);
     if (!msg.read) {
+      // Mark as read
       await fetch('/api/messages', {
         method:  'PATCH',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -183,7 +183,7 @@ export default function MessagesPage() {
   }
 
   return (
-    <>
+    <Layout>
       <Head>
         <title>Messages — Bounty</title>
       </Head>
@@ -191,6 +191,7 @@ export default function MessagesPage() {
       <div className="min-h-screen py-10 px-4" style={{ background: 'hsl(var(--background))' }}>
         <div className="max-w-3xl mx-auto">
 
+          {/* Page header */}
           <div className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-2xl font-black" style={{ ...DOTO, color: 'hsl(var(--foreground))' }}>
@@ -215,24 +216,28 @@ export default function MessagesPage() {
             )}
           </div>
 
+          {/* Error */}
           {error && (
             <div className="text-center py-10 text-sm" style={{ color: '#ef4444' }}>{error}</div>
           )}
 
+          {/* Loading */}
           {loading && <Spinner />}
 
+          {/* Empty state */}
           {!loading && !error && messages.length === 0 && (
             <div
               className="rounded-2xl border py-20 text-center"
               style={S.card}
             >
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="ml-auto mr-auto mb-3" style={S.muted}>
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2 2h14a2 2 0 0 1 2 2z" />
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-3" style={S.muted}>
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
               </svg>
               <p className="text-sm font-semibold" style={S.muted}>No messages yet</p>
             </div>
           )}
 
+          {/* Message list */}
           {!loading && !error && messages.length > 0 && (
             <div className="rounded-2xl border overflow-hidden" style={S.card}>
               {messages.map((msg, i) => (
@@ -247,6 +252,7 @@ export default function MessagesPage() {
                   onMouseEnter={e => { e.currentTarget.style.background = 'hsl(var(--secondary))'; }}
                   onMouseLeave={e => { e.currentTarget.style.background = !msg.read ? 'hsl(var(--secondary))' : 'transparent'; }}
                 >
+                  {/* Avatar */}
                   {msg.type === 'system' ? (
                     <div
                       style={{
@@ -269,6 +275,7 @@ export default function MessagesPage() {
                     </div>
                   )}
 
+                  {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
                       {msg.type === 'system' ? (
@@ -301,6 +308,7 @@ export default function MessagesPage() {
                     </p>
                   </div>
 
+                  {/* Time */}
                   <span className="text-xs flex-shrink-0 mt-0.5" style={S.muted}>
                     {timeAgo(msg.createdAt)}
                   </span>
@@ -311,6 +319,7 @@ export default function MessagesPage() {
         </div>
       </div>
 
+      {/* Message detail overlay */}
       {selected && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center"
@@ -323,6 +332,7 @@ export default function MessagesPage() {
             style={S.card}
             onClick={e => e.stopPropagation()}
           >
+            {/* Header */}
             <div className="flex items-start justify-between px-6 py-5 border-b" style={{ borderColor: 'hsl(var(--border))' }}>
               <div className="flex-1 min-w-0">
                 {selected.type === 'system' ? (
@@ -361,11 +371,15 @@ export default function MessagesPage() {
                 </svg>
               </button>
             </div>
+
+            {/* Body */}
             <div className="px-6 py-5" style={{ maxHeight: '50vh', overflowY: 'auto' }}>
               <p className="text-sm leading-relaxed whitespace-pre-wrap" style={S.fg}>
                 {selected.body}
               </p>
             </div>
+
+            {/* Footer */}
             <div className="px-6 py-4 border-t flex justify-end" style={{ borderColor: 'hsl(var(--border))' }}>
               <button
                 onClick={() => setSelected(null)}
@@ -380,6 +394,6 @@ export default function MessagesPage() {
           </div>
         </div>
       )}
-    </>
+    </Layout>
   );
 }

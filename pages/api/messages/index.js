@@ -1,7 +1,7 @@
 ﻿// FILE: pages/api/messages/index.js
 import dbConnect from '../../../utils/dbConnect';
 import Message from '../../../models/Message';
-import { requireAuth } from '../../../utils/serverAuth';
+import { requireAuth } from '../../../utils/auth';
 
 export default async function handler(req, res) {
   const auth = requireAuth(req);
@@ -9,6 +9,7 @@ export default async function handler(req, res) {
 
   await dbConnect();
 
+  // GET — fetch inbox messages for current user
   if (req.method === 'GET') {
     try {
       const { page = '1', limit = '30' } = req.query;
@@ -31,6 +32,7 @@ export default async function handler(req, res) {
     }
   }
 
+  // PATCH — mark messages as read
   if (req.method === 'PATCH') {
     try {
       const { messageId } = req.body;
@@ -40,6 +42,7 @@ export default async function handler(req, res) {
           { read: true }
         );
       } else {
+        // Mark all as read
         await Message.updateMany({ recipientId: auth.userId, read: false }, { read: true });
       }
       return res.status(200).json({ message: 'Marked as read' });
