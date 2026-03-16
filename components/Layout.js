@@ -262,7 +262,7 @@ function AuthModal({ isOpen, initialView, onClose }) {
     if (isSignup && password !== confirmPassword) { setError('Passwords do not match.'); return; }
     setLoading(true);
     try {
-      const endpoint = isSignup ? '/api/auth/register' : '/api/auth/login';
+      const endpoint = isSignup ? '/api/auth/signup' : '/api/auth/login';
       const body = { username, password };
       const res = await fetch(endpoint, {
         method: 'POST',
@@ -273,7 +273,7 @@ function AuthModal({ isOpen, initialView, onClose }) {
       if (!res.ok) { setError(data.message || 'Something went wrong.'); return; }
       if (data.token && typeof window !== 'undefined') {
         localStorage.setItem('bounty_token', data.token);
-        localStorage.setItem('authenticated_username', data.username || username);
+        localStorage.setItem('authenticated_username', data.user?.username || data.username || username);
         onClose();
         window.location.reload();
       }
