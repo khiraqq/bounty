@@ -1,8 +1,10 @@
-// FILE: pages/api/auth/signup.js
-import { connectDB }    from '../../../lib/mongodb';
-import { User }         from '../../../lib/models';
-import { encodeSession, COOKIE_NAME } from '../../../lib/session';
+// FILE: pages/api/auth/signup.js 
+import { connectDB } from '../../../lib/mongodb';
+import { User }      from '../../../lib/models';
 import bcrypt from 'bcryptjs';
+import jwt   from 'jsonwebtoken';
+
+const JWT_SECRET = process.env.JWT_SECRET || 'bounty_dev_secret_change_in_prod';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST')
@@ -25,27 +27,18 @@ export default async function handler(req, res) {
       return res.status(409).json({ message: 'Username is already taken.' });
 
     const hash = await bcrypt.hash(password, 12);
-
     const user = await User.create({
       username:   username.trim(),
       password:   hash,
       authMethod: 'password',
+      role:       'user',
     });
 
-    const sessionData = {
-      userId:     user._id.toString(),
-      username:   user.username,
-      authMethod: 'password',
-      avatarUrl:  '',
-    };
-
-    const token = encodeSession(sessionData);
-
-    res.setHeader(
-      'Set-Cookie',
-      `${COOKIE_NAME}=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${7 * 24 * 3600}${
-        process.env.NODE_ENV === 'production' ? '; Secure' : ''
-      }`
+    // Issue a real JWT so all API routes (seller apply, admin, etc.) can verify it
+    const token = jwt.sign(
+      { userId: user._id.toString(), username: user.username, role: user.role },
+      JWT_SECRET,
+      { expiresIn: '7d' }
     );
 
     return res.status(201).json({

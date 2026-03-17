@@ -1150,12 +1150,16 @@ export default function AdminPage() {
     const tok = localStorage.getItem('bounty_token');
     if (!tok) { setIsAdmin(false); return; }
     setToken(tok);
-    // Verify admin role by checking the applications endpoint
-    fetch('/api/admin/applications?limit=1', {
+    // Verify the user actually has role=admin in the database
+    fetch('/api/admin/me', {
       headers: { Authorization: `Bearer ${tok}` },
-    }).then(r => {
-      if (r.status === 403 || r.status === 401) setIsAdmin(false);
-      else setIsAdmin(true);
+    }).then(async r => {
+      if (r.status === 200) {
+        const data = await r.json();
+        setIsAdmin(data.role === 'admin');
+      } else {
+        setIsAdmin(false);
+      }
     }).catch(() => setIsAdmin(false));
   }, []);
 
