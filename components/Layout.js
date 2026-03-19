@@ -762,8 +762,6 @@ export default function Layout({ children }) {
             Bounty
           </Link>
 
-          <Link href="/browse" className="nav-link">Browse</Link>
-
           {/* Category nav with megadropdowns */}
           {CATEGORY_KEYS.map(cat => (
             <div

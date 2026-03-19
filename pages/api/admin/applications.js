@@ -53,7 +53,8 @@ async function assertAdmin(req, res) {
   if (!auth) { res.status(401).json({ message: 'Unauthorized' }); return null; }
   await connectDB();
   const admin = await User.findById(auth.userId).lean();
-  if (!admin || admin.role !== 'admin') { res.status(403).json({ message: 'Forbidden' }); return null; }
+  const adminOk = admin && (admin.role === 'admin' || admin.isAdmin === true);
+  if (!adminOk) { res.status(403).json({ message: 'Forbidden' }); return null; }
   return admin;
 }
 

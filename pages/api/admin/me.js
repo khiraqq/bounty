@@ -1,4 +1,6 @@
 // FILE: pages/api/admin/me.js
+// Checks whether the current JWT holder is an admin.
+// Supports BOTH role:'admin' (string) and isAdmin:true (boolean) for compatibility.
 import { connectDB } from '../../../lib/mongodb';
 import { User }      from '../../../lib/models';
 import jwt from 'jsonwebtoken';
@@ -26,11 +28,20 @@ export default async function handler(req, res) {
   await connectDB();
 
   try {
-    const user = await User.findById(auth.userId).select('role username').lean();
-    if (!user)          return res.status(401).json({ message: 'User not found.' });
-    if (user.role !== 'admin') return res.status(403).json({ message: 'Forbidden.' });
+    const user = await User.findById(auth.userId)
+      .select('role isAdmin username')
+      .lean();
 
-    return res.status(200).json({ role: user.role, username: user.username });
+    if (!user)
+      return res.status(401).json({ message: 'User not found.' });
+
+    // Accept EITHER role:'admin' OR isAdmin:true so manual MongoDB edits work
+    const isAdmin = user.role === 'admin' || user.isAdmin === true;
+
+    if (!isAdmin)
+      return res.status(403).json({ message: 'Forbidden — admin only.' });
+
+    return res.status(200).json({ role: 'admin', username: user.username });
   } catch (err) {
     console.error('[admin/me]', err);
     return res.status(500).json({ message: 'Server error.' });
